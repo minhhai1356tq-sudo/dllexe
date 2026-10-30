@@ -1,113 +1,357 @@
-Skip to content
-minhhai1356tq-sudo
-dllexe
-Repository navigation
-Code
-Issues
-Pull requests
-Agents
-Actions
-Projects
-Wiki
-Security and quality
-Insights
-Settings
-Build DLL (x86)
-Update ui.cpp #30
-All jobs
-Run details
-build
-failed now in 4m 0s
-Search logs
-2s
-8s
-2s
-2m 24s
-3s
-1s
-1m 16s
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(134,36): warning C4566: character represented by universal-character-name '\uE04C' cannot be represented in the current code page (1252) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(136,30): warning C4566: character represented by universal-character-name '\uE04D' cannot be represented in the current code page (1252) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(137,32): warning C4566: character represented by universal-character-name '\uE085' cannot be represented in the current code page (1252) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(140,29): warning C4566: character represented by universal-character-name '\uE005' cannot be represented in the current code page (1252) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(143,33): warning C4566: character represented by universal-character-name '\uE080' cannot be represented in the current code page (1252) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(144,50): warning C4566: character represented by universal-character-name '\uE086' cannot be represented in the current code page (1252) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(145,40): warning C4566: character represented by universal-character-name '\uE081' cannot be represented in the current code page (1252) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(146,40): warning C4566: character represented by universal-character-name '\uE081' cannot be represented in the current code page (1252) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(147,40): warning C4566: character represented by universal-character-name '\uE082' cannot be represented in the current code page (1252) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(148,42): warning C4566: character represented by universal-character-name '\uE083' cannot be represented in the current code page (1252) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(156,41): warning C4566: character represented by universal-character-name '\uE068' cannot be represented in the current code page (1252) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(168,43): warning C4018: '<': signed/unsigned mismatch [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(186,43): warning C4018: '<': signed/unsigned mismatch [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\NameGun.cpp(219,43): warning C4018: '<': signed/unsigned mismatch [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(340,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(341,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(342,16): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(379,28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(380,28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(381,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(399,16): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(481,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(482,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(493,72): warning C4305: 'argument': truncation from 'double' to 'float' [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(493,66): warning C4305: 'argument': truncation from 'double' to 'float' [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(493,60): warning C4305: 'argument': truncation from 'double' to 'float' [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(497,38): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(498,35): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(521,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(522,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(523,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(525,29): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(525,56): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(539,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(540,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(541,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector3.hpp(542,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\Globals.hpp(41,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\Globals.hpp(64,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector2.hpp(295,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector2.hpp(296,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector2.hpp(449,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Math\Vector\Vector2.hpp(450,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\Visual.cpp(140,57): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\Visual.cpp(141,82): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\EspLines\Features\Visuals\Visual.cpp(141,58): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data [D:\a\dllexe\dllexe\dllexe.vcxproj]
-"D:\a\dllexe\dllexe\dllexe.sln" (default target) (1) ->
-"D:\a\dllexe\dllexe\dllexe.vcxproj" (default target) (2) ->
-(ClCompile target) -> 
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(167,16): error C2039: 'WindowShadowSize': is not a member of 'ImGuiStyle' [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(193,42): error C2678: binary '+': no operator found which takes a left-hand operand of type 'ImVec2' (or there is no acceptable conversion) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(193,23): error C2664: 'void ImDrawList::AddRectFilled(const ImVec2 &,const ImVec2 &,ImU32,float,ImDrawFlags)': cannot convert argument 2 from 'ImColor' to 'const ImVec2 &' [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(194,31): error C2678: binary '+': no operator found which takes a left-hand operand of type 'ImVec2' (or there is no acceptable conversion) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(194,63): error C2678: binary '+': no operator found which takes a left-hand operand of type 'ImVec2' (or there is no acceptable conversion) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(194,23): error C2660: 'ImDrawList::AddLine': function does not take 2 arguments [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(198,31): error C2678: binary '+': no operator found which takes a left-hand operand of type 'ImVec2' (or there is no acceptable conversion) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(202,31): error C2678: binary '+': no operator found which takes a left-hand operand of type 'ImVec2' (or there is no acceptable conversion) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(208,47): error C2678: binary '+': no operator found which takes a left-hand operand of type 'ImVec2' (or there is no acceptable conversion) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(208,23): error C2660: 'ImDrawList::AddImage': function does not take 2 arguments [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(210,31): error C2678: binary '+': no operator found which takes a left-hand operand of type 'ImVec2' (or there is no acceptable conversion) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(210,61): error C2678: binary '+': no operator found which takes a left-hand operand of type 'ImVec2' (or there is no acceptable conversion) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(210,23): error C2660: 'ImDrawList::AddLine': function does not take 2 arguments [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(303,36): error C2678: binary '+': no operator found which takes a left-hand operand of type 'ImVec2' (or there is no acceptable conversion) [D:\a\dllexe\dllexe\dllexe.vcxproj]
-  D:\a\dllexe\dllexe\src\ui\ui.cpp(303,23): error C2664: 'void ImDrawList::AddRect(const ImVec2 &,const ImVec2 &,ImU32,float,ImDrawFlags,float)': cannot convert argument 2 from 'ImU32' to 'const ImVec2 &' [D:\a\dllexe\dllexe\dllexe.vcxproj]
-    381 Warning(s)
-    15 Error(s)
-Time Elapsed 00:01:01.97
-Error: Process completed with exit code 1.
-0s
-2s
-Post job cleanup.
-"C:\Program Files\Git\bin\git.exe" version
-git version 2.56.0.windows.2
-Temporarily overriding HOME='D:\a\_temp\1129004c-16df-4267-a87a-9bdeefa482d6' before making global git config changes
-Adding repository directory to the temporary git global config as a safe directory
-"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\dllexe\dllexe
-"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
-"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
-"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-http.https://github.com/.extraheader
-"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
-"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
-"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
-"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
-0s
+#include "ui.hpp"
+#include "imgui/imgui.h"
+#include "imgui/backends/imgui_impl_win32.h"
+#include "imgui/backends/imgui_impl_dx11.h"
+#include <src/Overlay/Overlay.hpp>
+#include <src/Globals.hpp>
+#include <src/Fonts/FontInter.hpp>
+#include <imgui/imgui_internal.h>
+#include <src/Fonts/FontAwesome.hpp>
+#include <src/Fonts/Fonts.hpp>
+#include <thread>
+#include <Auth/auth.hpp>
+#define CURL_STATICLIB
+#include "Auth/Curl/curl.h"
+#include "src/Fonts/Fonts.hpp"
+#include <FontAwesome6.hpp>
+#include "Logo.hpp"
+#include <lmcons.h>
+#include <sstream>
+#include <iomanip>
+#include <chrono>
+#include <ctime>
+#include <d3d11.h>
+#include <wincodec.h>
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "windowscodecs.lib")
+
+static inline ImVec2 Size = ImVec2(640, 440);
+int CurrentTab = 2;
+
+char Username[255] = "";
+char Password[255] = "";
+char Key[255] = "";
+char Gmail[255] = "";
+
+ImFont* InterBlack = nullptr;
+ImFont* InterBold = nullptr;
+ImFont* InterBold12 = nullptr;
+ImFont* InterExtraBold = nullptr;
+ImFont* InterExtraLight = nullptr;
+ImFont* InterLight = nullptr;
+ImFont* InterMedium = nullptr;
+ImFont* InterRegular = nullptr;
+ImFont* InterSemiBold = nullptr;
+ImFont* InterThin = nullptr;
+
+ImFont* FontAwesomeRegular = nullptr;
+ImFont* FontAwesomeSolid = nullptr;
+ImFont* FontAwesomeSolid14 = nullptr;
+ImFont* FontAwesomeBrands = nullptr;
+
+static ID3D11Device* g_pd3dDevice = nullptr;
+static ID3D11DeviceContext* g_pd3dDeviceContext = nullptr;
+HWND hwnd = nullptr;
+ID3D11ShaderResourceView* Logo = nullptr;
+
+std::string GetUsername()
+{
+    char username[UNLEN + 1];
+    DWORD username_len = UNLEN + 1;
+    if (GetUserNameA(username, &username_len))
+        return std::string(username);
+    return "Unknown";
+}
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+namespace FWork {
+    void Interface::Initialize(HWND Window, HWND TargetWindow, ID3D11Device* Device, ID3D11DeviceContext* DeviceContext) {
+        hWindow = Window;
+        IDevice = Device;
+        g_pd3dDevice = Device;
+        g_pd3dDeviceContext = DeviceContext;
+
+        ImGui::CreateContext();
+        ImGui_ImplWin32_Init(hWindow);
+        ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+
+        InterBlack = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(InterBlack_compressed_data, InterBlack_compressed_size, 14);
+        InterBold = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(InterBold_compressed_data, InterBold_compressed_size, 16);
+        InterBold12 = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(InterBold_compressed_data, InterBold_compressed_size, 12);
+        InterExtraBold = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(InterExtraBold_compressed_data, InterExtraBold_compressed_size, 14);
+        InterExtraLight = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(InterExtraLight_compressed_data, InterExtraLight_compressed_size, 14);
+        InterLight = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(InterLight_compressed_data, InterLight_compressed_size, 16);
+        InterMedium = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(InterMedium_compressed_data, InterMedium_compressed_size, 16);
+        InterRegular = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(InterRegular_compressed_data, InterRegular_compressed_size, 16);
+        InterSemiBold = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(InterSemiBold_compressed_data, InterSemiBold_compressed_size, 16);
+        InterThin = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(InterThin_compressed_data, InterThin_compressed_size, 14);
+
+        ImFontConfig FontAwesomeConfig;
+        static const ImWchar FontAwesomeRanges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+        static const ImWchar FontAwesomeRangesBrands[] = { ICON_MIN_FAB, ICON_MAX_FAB, 0 };
+
+        FontAwesomeRegular = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(FontAwesome6Regular_compressed_data, FontAwesome6Regular_compressed_size, 17.f, &FontAwesomeConfig, FontAwesomeRanges);
+        FontAwesomeSolid = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(FontAwesome6Solid_compressed_data, FontAwesome6Solid_compressed_size, 17.f, &FontAwesomeConfig, FontAwesomeRanges);
+        FontAwesomeSolid14 = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(FontAwesome6Solid_compressed_data, FontAwesome6Solid_compressed_size, 14.f, &FontAwesomeConfig, FontAwesomeRanges);
+        FontAwesomeBrands = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(FontAwesome6Brands_compressed_data, FontAwesome6Brands_compressed_size, 17.f, &FontAwesomeConfig, FontAwesomeRangesBrands);
+
+        Fonts::Initialize(IDevice);
+
+        IWICImagingFactory* wicFactory = nullptr;
+        CoInitializeEx(NULL, COINIT_MULTITHREADED);
+        CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory));
+        if (wicFactory) {
+            IWICStream* stream = nullptr;
+            wicFactory->CreateStream(&stream);
+            if (stream) {
+                stream->InitializeFromMemory((BYTE*)LogoBytes, sizeof(LogoBytes));
+                IWICBitmapDecoder* decoder = nullptr;
+                if (SUCCEEDED(wicFactory->CreateDecoderFromStream(stream, NULL, WICDecodeMetadataCacheOnDemand, &decoder))) {
+                    IWICBitmapFrameDecode* frame = nullptr;
+                    if (SUCCEEDED(decoder->GetFrame(0, &frame))) {
+                        IWICFormatConverter* converter = nullptr;
+                        wicFactory->CreateFormatConverter(&converter);
+                        if (converter) {
+                            converter->Initialize(frame, GUID_WICPixelFormat32bppRGBA, WICBitmapDitherTypeNone, NULL, 0.0, WICBitmapPaletteTypeCustom);
+                            UINT w, h;
+                            converter->GetSize(&w, &h);
+                            std::vector<BYTE> pixels(w * h * 4);
+                            converter->CopyPixels(NULL, w * 4, (UINT)pixels.size(), pixels.data());
+                            D3D11_TEXTURE2D_DESC desc = {};
+                            desc.Width = w; desc.Height = h; desc.MipLevels = 1; desc.ArraySize = 1;
+                            desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; desc.SampleDesc.Count = 1;
+                            desc.Usage = D3D11_USAGE_DEFAULT; desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+                            D3D11_SUBRESOURCE_DATA sub = {}; sub.pSysMem = pixels.data(); sub.SysMemPitch = w * 4;
+                            ID3D11Texture2D* texture = nullptr;
+                            if (SUCCEEDED(g_pd3dDevice->CreateTexture2D(&desc, &sub, &texture))) {
+                                D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+                                srvDesc.Format = desc.Format; srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+                                srvDesc.Texture2D.MipLevels = 1;
+                                g_pd3dDevice->CreateShaderResourceView(texture, &srvDesc, &Logo);
+                                texture->Release();
+                            }
+                            converter->Release();
+                        }
+                        frame->Release();
+                    }
+                    decoder->Release();
+                }
+                stream->Release();
+            }
+            wicFactory->Release();
+        }
+        CoUninitialize();
+
+        InitializeMenu();
+    }
+
+    void Interface::InitializeMenu() {
+        bIsMenuOpen = true;
+        SetWindowLong(hWindow, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT);
+        SetForegroundWindow(hWindow);
+        SetWindowPos(hWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+    }
+
+    void Interface::UpdateStyle() {
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        ImGuiStyle* Style = &ImGui::GetStyle();
+        Style->AntiAliasedLines = true;
+        Style->AntiAliasedLinesUseTex = true;
+        Style->AntiAliasedFill = true;
+        io.IniFilename = nullptr;
+        io.LogFilename = nullptr;
+        Style->WindowRounding = 7;
+        Style->WindowBorderSize = 1;
+        Style->WindowPadding = ImVec2(0, 0);
+        Style->ScrollbarSize = 8;
+        Style->Colors[ImGuiCol_Separator] = ImColor(0, 0, 0, 0);
+        Style->Colors[ImGuiCol_SeparatorActive] = ImColor(0, 0, 0, 0);
+        Style->Colors[ImGuiCol_SeparatorHovered] = ImColor(0, 0, 0, 0);
+        Style->Colors[ImGuiCol_ResizeGrip] = ImColor(0, 0, 0, 0);
+        Style->Colors[ImGuiCol_ResizeGripActive] = ImColor(0, 0, 0, 0);
+        Style->Colors[ImGuiCol_ResizeGripHovered] = ImColor(0, 0, 0, 0);
+        Style->Colors[ImGuiCol_WindowBg] = ImColor(12, 12, 12);
+        Style->Colors[ImGuiCol_ChildBg] = ImColor(0, 0, 0, 0);
+        Style->Colors[ImGuiCol_Border] = ImColor(23, 24, 25);
+        Style->Colors[ImGuiCol_Text] = ImColor(1.f, 1.f, 1.f, 0.8f);
+        Style->Colors[ImGuiCol_TextSelectedBg] = ImColor(47, 108, 153, 100);
+    }
+
+    void Interface::RenderGui() {
+        if (!bIsMenuOpen) return;
+
+        ImGui::SetNextWindowSize(ImVec2(640, 440));
+        ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        {
+            ImDrawList* DrawList = ImGui::GetWindowDrawList();
+            ImVec2 Pos = ImGui::GetWindowPos();
+            ImVec2 Size = ImGui::GetWindowSize();
+
+            DrawList->AddRectFilled(
+                Pos,
+                ImVec2(Pos.x + Size.x / 3.5f, Pos.y + Size.y),
+                ImColor(16, 16, 16), ImGui::GetStyle().WindowRounding, ImDrawFlags_RoundCornersLeft);
+            DrawList->AddLine(
+                ImVec2(Pos.x + Size.x / 3.5f, Pos.y),
+                ImVec2(Pos.x + Size.x / 3.5f, Pos.y + Size.y),
+                ImGui::GetColorU32(ImGuiCol_Border));
+
+            ImGui::PushFont(InterMedium);
+            std::string username = GetUsername();
+            DrawList->AddText(ImVec2(Pos.x + 56, Pos.y + Size.y - 30), ImColor(255, 255, 255), username.c_str());
+            ImGui::PopFont();
+
+            ImGui::PushFont(InterRegular);
+            DrawList->AddText(ImVec2(Pos.x + 56, Pos.y + Size.y - 15), ImColor(112, 112, 121), "Expiry: Lifetime");
+            ImGui::PopFont();
+
+            float scale = g_Globals.Visuals.LogoScale;
+            ImVec2 logoSize(100.0f * scale, 100.0f * scale);
+            ImVec2 topLeft(Pos.x + (Size.x / 3.5f - logoSize.x) * 0.5f, Pos.y + 30.0f);
+            DrawList->AddImage(Logo, topLeft, ImVec2(topLeft.x + logoSize.x, topLeft.y + logoSize.y));
+
+            DrawList->AddLine(
+                ImVec2(Pos.x, Pos.y + Size.y - 60),
+                ImVec2(Pos.x + Size.x / 3.5f, Pos.y + Size.y - 60),
+                ImGui::GetColorU32(ImGuiCol_Border));
+
+            ImGui::BeginChild("LeftChild", ImVec2(Size.x / 3.5f, Size.y));
+            {
+                ImGui::SetCursorPos(ImVec2(20, Size.y / 7.0f + 10));
+                ImGui::BeginGroup();
+                {
+                    ImGui::PushFont(InterBold);
+                    ImGui::TextColored(ImColor(1.f, 1.f, 1.f, 0.2f), "Combat");
+                    ImGui::PopFont();
+                    if (ImGui::Selectable("Aimbot", CurrentTab == 2)) CurrentTab = 2;
+
+                    ImGui::PushFont(InterBold);
+                    ImGui::TextColored(ImColor(1.f, 1.f, 1.f, 0.2f), "Visuals");
+                    ImGui::PopFont();
+                    if (ImGui::Selectable("World", CurrentTab == 3)) CurrentTab = 3;
+
+                    ImGui::PushFont(InterBold);
+                    ImGui::TextColored(ImColor(1.f, 1.f, 1.f, 0.2f), "Others");
+                    ImGui::PopFont();
+                    if (ImGui::Selectable("Misc", CurrentTab == 4)) CurrentTab = 4;
+                    if (ImGui::Selectable("Configs", CurrentTab == 5)) CurrentTab = 5;
+                }
+                ImGui::EndGroup();
+            }
+            ImGui::EndChild();
+
+            ImGui::SetCursorPos(ImVec2(Size.x / 3.5f, 0));
+            ImGui::BeginChild("MainChild", ImVec2(Size.x - (Size.x / 3.5f), Size.y), ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+            {
+                if (CurrentTab == 2) {
+                    ImGui::BeginTabBar("AimbotTab");
+                    if (ImGui::BeginTabItem("Combat")) {
+                        ImGui::Checkbox("Aimbot Legit", &g_Globals.AimBot.Enabled);
+                        ImGui::Checkbox("Aimbot Rage", &g_Globals.AimBot.AimShoulder);
+                        ImGui::InputInt("KeyBind", &g_Globals.AimBot.AimbotBind);
+                        ImGui::Checkbox("Ignore Knocked", &g_Globals.AimBot.IgnoreKnocked);
+                        ImGui::Checkbox("Ignore Bots", &g_Globals.AimBot.IgnoreBots);
+                        ImGui::Checkbox("Enable Fov", &g_Globals.Misc.ShowAimbotFov);
+                        ImGui::EndTabItem();
+                    }
+                    if (ImGui::BeginTabItem("Settings")) {
+                        ImGui::SliderInt("Field of View", &g_Globals.AimBot.DistanceAim, 0, 360, "%d");
+                        ImGui::SliderInt("Max Distance", &g_Globals.AimBot.Fov, 0, 200, "%dm");
+                        ImGui::SliderInt("Chest Rate ( ms )", &g_Globals.AimBot.UpdateInterval, 0, 500, "%dms");
+                        ImGui::ColorEdit4("Fov Filled Color", g_Globals.AimBot.Fillcolor);
+                        ImGui::ColorEdit4("Fov Color", g_Globals.Misc.AimbotFovColor);
+                        ImGui::EndTabItem();
+                    }
+                    ImGui::EndTabBar();
+                }
+                else if (CurrentTab == 3) {
+                    ImGui::BeginTabBar("WorldTab");
+                    if (ImGui::BeginTabItem("World")) {
+                        ImGui::Checkbox("Enable Esp", &g_Globals.Visuals.Enable);
+                        ImGui::Checkbox("Enable Observe Esp", &g_Globals.Visuals.Observe);
+                        ImGui::Checkbox("Enable Watermark", &g_Globals.Visuals.Watermark);
+                        ImGui::Checkbox("Enable Enemies", &g_Globals.Visuals.Enemy);
+                        ImGui::Checkbox("Esp Weapons Text", &g_Globals.Visuals.ESPWeapon);
+                        ImGui::Checkbox("Esp Weapons Icon", &g_Globals.Visuals.ESPWeaponIcon);
+                        ImGui::Checkbox("Esp Lines", &g_Globals.Visuals.Lines);
+                        ImGui::Checkbox("Enable Health Bar", &g_Globals.Visuals.HealthBar);
+                        ImGui::Checkbox("Health Text", &g_Globals.Visuals.ESPHealthTEXT);
+                        ImGui::Checkbox("Enable Box", &g_Globals.Visuals.Box);
+                        ImGui::Checkbox("Enable FilledBox", &g_Globals.Visuals.FilledBox);
+                        ImGui::Checkbox("Enable Name", &g_Globals.Visuals.Name);
+                        ImGui::Checkbox("Enable Distance", &g_Globals.Visuals.Distance);
+                        ImGui::Checkbox("Enable Skeleton", &g_Globals.Visuals.Skeleton);
+                        ImGui::EndTabItem();
+                    }
+                    if (ImGui::BeginTabItem("Colors")) {
+                        ImGui::ColorEdit4("Name Color", g_Globals.Visuals.NameColor);
+                        ImGui::ColorEdit4("Distance Color", g_Globals.Visuals.DistColor);
+                        ImGui::ColorEdit4("Skeleton Color", g_Globals.Visuals.SkeletonColor);
+                        ImGui::ColorEdit4("Box Color", g_Globals.Visuals.BoxColor);
+                        ImGui::ColorEdit4("Lines Color", g_Globals.Visuals.LinesColor);
+                        ImGui::ColorEdit4("Health Color", g_Globals.Visuals.texthColor);
+                        ImGui::EndTabItem();
+                    }
+                    ImGui::EndTabBar();
+                }
+                else if (CurrentTab == 4) {
+                    ImGui::Checkbox("Stream Mode", &g_Globals.General.Capture);
+                    ImGui::SliderInt("Delay", &g_Globals.General.Delay, 0, 100, "%dms");
+                    ImGui::SliderFloat("Logo Scale", &g_Globals.Visuals.LogoScale, 0.10f, 1.00f, "%.2f");
+                    ImGui::InputInt("Keybind Menu", &g_Globals.General.MenuKey);
+                    if (ImGui::Button("Unload Menu")) g_Globals.General.ShutDown = true;
+                }
+                else if (CurrentTab == 5) {
+                    ImGui::Text("In Maintenance...");
+                }
+            }
+            ImGui::EndChild();
+            DrawList->AddRect(
+                Pos,
+                ImVec2(Pos.x + Size.x, Pos.y + Size.y),
+                ImGui::GetColorU32(ImGuiCol_Border), ImGui::GetStyle().WindowRounding);
+        }
+        ImGui::End();
+    }
+
+    void Interface::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+        if (uMsg == WM_SIZE) {
+            if (wParam != SIZE_MINIMIZED) {
+                ResizeWidht = (UINT)LOWORD(lParam);
+                ResizeHeight = (UINT)HIWORD(lParam);
+            }
+        }
+        if (bIsMenuOpen) {
+            ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
+        }
+    }
+
+    void Interface::HandleMenuKey() {
+        static bool MenuKeyDown = false;
+        if (GetAsyncKeyState(g_Globals.General.MenuKey) & 0x8000) {
+            if (!MenuKeyDown) {
+                MenuKeyDown = true;
+                bIsMenuOpen = !bIsMenuOpen;
+                if (bIsMenuOpen) {
+                    SetWindowLong(hWindow, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE);
+                    SetForegroundWindow(hWindow);
+                } else {
+                    SetWindowLong(hWindow, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_LAYERED | WS_EX_NOACTIVATE);
+                    SetForegroundWindow(hTargetWindow);
+                }
+                SetWindowPos(hWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+            }
+        } else {
+            MenuKeyDown = false;
+        }
+    }
+
+    void Interface::ShutDown() {
+        ImGui_ImplDX11_Shutdown();
+        ImGui_ImplWin32_Shutdown();
+        ImGui::DestroyContext();
+        Overlay::ShutDown();
+    }
+}
