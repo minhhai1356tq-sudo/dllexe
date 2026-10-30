@@ -1,4 +1,4 @@
-name: Build DLL
+name: Build DLL (x86)
 
 on:
   push:
@@ -13,18 +13,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Add MSBuild to PATH
+    - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
 
     - name: Build with MSBuild
-      run: msbuild main.cpp /p:Configuration=Release /p:Platform=x64
+      run: msbuild dllexe.sln /p:Configuration=Release /p:Platform=Win32
 
-    - name: Upload DLL artifact
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: dlllexe-x64
-        path: |
-          **/*.dll
-          **/*.lib
-          **/*.pdb
+        name: dllexe-x86
+        path: Release/*.dll
         if-no-files-found: error
