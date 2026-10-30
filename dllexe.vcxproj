@@ -44,7 +44,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   
-  <!-- CẤU HÌNH INCLUDE VÀ LIB CHO CẢ 2 CONFIG -->
   <PropertyGroup>
     <IncludePath>$(ProjectDir);$(ProjectDir)minhook\include;$(ProjectDir)imgui;$(ProjectDir)imgui\backends;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)minhook\lib;$(LibraryPath)</LibraryPath>
@@ -54,6 +53,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
+      <!-- BẬT C++17 -->
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DLLEXE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -61,7 +62,6 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <!-- Đã xóa D3DX11.lib và MinHook.x86.lib -->
       <AdditionalDependencies>user32.lib;d3d11.lib;D3DCompiler.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -71,6 +71,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <!-- BẬT C++17 -->
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;DLLEXE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -80,14 +82,11 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <!-- Đã xóa D3DX11.lib và MinHook.x86.lib -->
       <AdditionalDependencies>user32.lib;d3d11.lib;D3DCompiler.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
 
-  <!-- KHAI BÁO TẤT CẢ CÁC FILE CẦN BUILD -->
   <ItemGroup>
-    <!-- Main & ImGui -->
     <ClCompile Include="main.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -95,14 +94,9 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_dx11.cpp" />
-    
-    <!-- MinHook từ source tự tải -->
     <ClCompile Include="minhook\src\*.c" />
-    
-    <!-- Source của mày -->
     <ClCompile Include="src\adb\adb.cpp" />
     <ClCompile Include="src\Overlay\Overlay.cpp" />
-    <!-- Nếu mày có thêm file .cpp nào khác trong src hay EspLines, hãy thêm vào đây -->
   </ItemGroup>
 
   <ItemGroup>
