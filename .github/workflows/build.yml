@@ -16,9 +16,14 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
 
-    - name: Install DirectX SDK (June 2010)
+    - name: Install DirectX SDK
+      run: choco install directx-sdk -y
+
+    - name: Download ImGui
       run: |
-        choco install directx-sdk -y
+        Invoke-WebRequest -Uri "https://github.com/ocornut/imgui/archive/refs/tags/v1.90.9.zip" -OutFile "imgui.zip"
+        Expand-Archive -Path "imgui.zip" -DestinationPath "."
+        Rename-Item -Path "imgui-1.90.9" -NewName "imgui"
 
     - name: Build with MSBuild
       run: msbuild dllexe.sln /p:Configuration=Release /p:Platform=Win32
