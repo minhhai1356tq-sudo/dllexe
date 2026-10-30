@@ -1,8 +1,10 @@
 #include "Overlay.hpp"
 #include <string>
 #include <dwmapi.h>
-#include <imgui_impl_win32.h>
-#include <imgui_impl_dx11.h>
+#pragma comment(lib, "dwmapi.lib")
+// Sửa lại đường dẫn include ImGui trỏ đúng vào thư mục tự tải về
+#include "imgui/backends/imgui_impl_win32.h"
+#include "imgui/backends/imgui_impl_dx11.h"
 #include <iostream>
 #include <algorithm>
 #include <src/Globals.hpp>
