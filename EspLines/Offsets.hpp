@@ -11,8 +11,8 @@ public:
     static inline uintptr_t StaticClass = 0x5C;
 
     // BỔ SUNG CHO DATA.CPP
-    static inline uintptr_t Il2CppDictionaryDataPtr = 0x0; // Cần tìm offset thật
-    static inline uintptr_t Il2CppDictionaryCount  = 0x0; // Cần tìm offset thật
+    static inline uintptr_t Il2CppDictionaryDataPtr = 0x0;
+    static inline uintptr_t Il2CppDictionaryCount  = 0x0;
 
     // MATCH
     static inline uintptr_t CurrentMatch       = 0x50;
@@ -202,9 +202,10 @@ public:
     static inline uintptr_t Player_JSGhostModel   = 0x13E4;
     static inline uintptr_t PlayerNetwork_LastValidTick = 0x1A58;
 
-    // BỔ SUNG CHO GHOSTHACK.CPP VÀ TELEPNEU.CPP
+    // BỔ SUNG CHO GHOSTHACK.CPP, TELEPNEU.CPP, DOWNPLAYER.CPP
     static inline uintptr_t GhostMode             = 0x13D0;
     static inline uintptr_t telepneu              = 0x1A58;
+    static inline uintptr_t tiro                  = 0x13D0;
 
     // CAMERA-3RD
     static inline uintptr_t Cam_RightOffset       = 0x44;
