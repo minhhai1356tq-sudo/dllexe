@@ -1,18 +1,18 @@
 // Offsets.hpp — FF 32-bit (Steph Wolf Dumper 2026-10-15)
-// Giữ tên symbol cũ để EspLines/*.cpp, Aimbot/*.cpp, Exploits/*.cpp không gãy.
 #pragma once
 #include <cstdint>
-
-// KHÔNG bật FFMax — mày chạy BlueStacks Nougat 32-bit (bản thường).
-// #define FFMax
 
 class Offsets {
 public:
     // BASE (runtime)
-    static inline uintptr_t Il2Cpp      = 0x0;          // il2cpp module base — fill at runtime
-    static inline uintptr_t UnityCpp    = 0x0;          // UnityPlayer module base — runtime
-    static inline uintptr_t InitBase    = 0xA342EFC;    // IntBase global (từ intbase.txt)
+    static inline uintptr_t Il2Cpp      = 0x0;
+    static inline uintptr_t UnityCpp    = 0x0;
+    static inline uintptr_t InitBase    = 0xA342EFC;
     static inline uintptr_t StaticClass = 0x5C;
+
+    // BỔ SUNG CHO DATA.CPP
+    static inline uintptr_t Il2CppDictionaryDataPtr = 0x0; // Cần tìm offset thật
+    static inline uintptr_t Il2CppDictionaryCount  = 0x0; // Cần tìm offset thật
 
     // MATCH
     static inline uintptr_t CurrentMatch       = 0x50;
@@ -27,7 +27,7 @@ public:
     static inline uintptr_t Player_Data       = 0x48;
     static inline uintptr_t Player_PhysXData  = 0x14E8;
     static inline uintptr_t Player_IsBot      = 0x324;
-    static inline uintptr_t IsClientBot       = 0x324;   // alias cũ
+    static inline uintptr_t IsClientBot       = 0x324;
     static inline uintptr_t IsFrozenKnockDown = 0x6C;
     static inline uintptr_t IsCadet           = 0x2A0;
     static inline uintptr_t IsFrustrum        = 0x7BC;
@@ -48,9 +48,9 @@ public:
     // AVATAR
     static inline uintptr_t AvatarManager       = 0x504;
     static inline uintptr_t Avatar              = 0xA8;
-    static inline uintptr_t Avatar_IsVisible    = 0x00;   // TODO: dump không ghi rõ — xem avatar; tạm 0x00, verify từ Avatar.cpp
-    static inline uintptr_t Avatar_Data         = 0x6C;   // Avatar_PAvatarData
-    static inline uintptr_t Avatar_Data_IsTeam  = 0x59;   // UMA_IsTeammate (bool)
+    static inline uintptr_t Avatar_IsVisible    = 0x00;
+    static inline uintptr_t Avatar_Data         = 0x6C;
+    static inline uintptr_t Avatar_Data_IsTeam  = 0x59;
     static inline uintptr_t UMA_IsLocalPlayer   = 0x58;
     static inline uintptr_t UMA_IsCastShadow    = 0x5A;
     static inline uintptr_t UMA_IsHideHead      = 0x5B;
@@ -58,7 +58,7 @@ public:
     static inline uintptr_t UMA_Animator        = 0xC8;
 
     // SHADOW / POSE
-    static inline uintptr_t ShadowState         = 0x14E8; // Player_PhysXData làm shadow base? xem ghi chú dưới
+    static inline uintptr_t ShadowState         = 0x14E8;
     static inline uintptr_t Player_ShadowBase   = 0x14E8;
     static inline uintptr_t XPose               = 0x78;
 
@@ -80,8 +80,8 @@ public:
     static inline uintptr_t DobleGunOffs1         = 0x4B4;
     static inline uintptr_t DobleGunOffs2         = 0x4D0;
 
-    // ATTRIBUTES (PlayerAttributes object)
-    static inline uintptr_t PlayerAttributes      = 0x500; // = LocalPlayerAttributes
+    // ATTRIBUTES
+    static inline uintptr_t PlayerAttributes      = 0x500;
     static inline uintptr_t FireInterval          = 0x100;
     static inline uintptr_t UnlimitedAmmo         = 0x114;
     static inline uintptr_t WeaponDamageScale     = 0xF8;
@@ -93,7 +93,7 @@ public:
     static inline uintptr_t CanAimassistOnStrop   = 0x70;
     static inline uintptr_t ReloadNoConsumeAmmo   = 0xC0;
     static inline uintptr_t NoReload              = 0xC1;
-    static inline uintptr_t NoReload2             = 0xC0; // alias cũ — ReloadNoConsumeAmmo
+    static inline uintptr_t NoReload2             = 0xC0;
     static inline uintptr_t FallingSpeedUpScale   = 0x20C;
     static inline uintptr_t InfiniteIceWall       = 0x78;
     static inline uintptr_t InfiniteHealer        = 0x200;
@@ -125,7 +125,7 @@ public:
     static inline uintptr_t FixedDeltaTime        = 0x24;
     static inline uintptr_t DeltaTime             = 0x10;
 
-    // AIM (silent aim)
+    // AIM
     static inline uintptr_t sAim1                 = 0x58C;
     static inline uintptr_t sAim2                 = 0x9D0;
     static inline uintptr_t sAim3                 = 0x38;
@@ -135,13 +135,13 @@ public:
     static inline uintptr_t Hit_Damage            = 0x44;
     static inline uintptr_t Hit_Part              = 0x50;
 
-    // AIM-HIT (Player)
+    // AIM-HIT
     static inline uintptr_t Player_AimHitA        = 0x788;
     static inline uintptr_t Player_AimHitB        = 0x790;
     static inline uintptr_t m_CapsuleHuman        = 0x794;
     static inline uintptr_t m_SniperFireCollider  = 0x798;
 
-    // PHYSICS / CCT (fly/noclip)
+    // PHYSICS / CCT
     static inline uintptr_t CCT_UseGravity        = 0x38;
     static inline uintptr_t CCT_GravityScale      = 0x3C;
     static inline uintptr_t CCT_JumpHeight        = 0x68;
@@ -150,7 +150,7 @@ public:
     static inline uintptr_t CCT_MaxSpeed          = 0x34;
     static inline uintptr_t CCT_Velocity          = 0x150;
     static inline uintptr_t CCT_CanMoveInAir      = 0x74;
-    static inline uintptr_t CCT_SolveMovementCollisions = 0x7D; // FALSE = noclip
+    static inline uintptr_t CCT_SolveMovementCollisions = 0x7D;
     static inline uintptr_t CCT_CharacterController     = 0x184;
     static inline uintptr_t CCT_Transform              = 0x188;
     static inline uintptr_t CCT_DeltaTime              = 0x134;
@@ -183,8 +183,8 @@ public:
     static inline uintptr_t HeadCollider          = 0x4E8;
     static inline uintptr_t LockedCollider        = 0x54;
     static inline uintptr_t BoneList              = 0x7B4;
-    static inline uintptr_t ColliderHECFNHJKOMN   = 0x4E8; // alias HeadCollider (cũ)
-    static inline uintptr_t ColliderINICDNFOFJB   = 0x54;  // alias LockedCollider (cũ)
+    static inline uintptr_t ColliderHECFNHJKOMN   = 0x4E8;
+    static inline uintptr_t ColliderINICDNFOFJB   = 0x54;
 
     // VIDA / SHORT
     static inline uintptr_t Vida                  = 0xC;
@@ -195,12 +195,16 @@ public:
     static inline uintptr_t PhysX_Velocity          = 0x20;
 
     // MISC
-    static inline uintptr_t NoGravity             = 0x14E8; // = PhysXData — verify theo exploit thực tế
+    static inline uintptr_t NoGravity             = 0x14E8;
     static inline uintptr_t Player_JumpCount      = 0x180;
     static inline uintptr_t Player_BlockUserMoveControl = 0x18D8;
     static inline uintptr_t Player_JSGhost        = 0x13D0;
     static inline uintptr_t Player_JSGhostModel   = 0x13E4;
     static inline uintptr_t PlayerNetwork_LastValidTick = 0x1A58;
+
+    // BỔ SUNG CHO GHOSTHACK.CPP VÀ TELEPNEU.CPP
+    static inline uintptr_t GhostMode             = 0x13D0;
+    static inline uintptr_t telepneu              = 0x1A58;
 
     // CAMERA-3RD
     static inline uintptr_t Cam_RightOffset       = 0x44;
@@ -211,11 +215,11 @@ public:
     static inline uintptr_t Cam_NeedUpdate        = 0x7D;
     static inline uintptr_t Cam_CollisionOffsetRight = 0x80;
     static inline uintptr_t Cam_CollisionOffsetBack  = 0x84;
-    static inline uintptr_t RightcameraOffset     = 0x44; // alias cũ
-    static inline uintptr_t FOVcameraoffset       = 0x50; // alias cũ
+    static inline uintptr_t RightcameraOffset     = 0x44;
+    static inline uintptr_t FOVcameraoffset       = 0x50;
     static inline uintptr_t VisionOffs            = 0x4C;
 
-    // BONES — theo ITransformNode run (dump mới)
+    // BONES
     class Bones {
     public:
         static inline uintptr_t Head          = 0x49C;
@@ -235,11 +239,10 @@ public:
         static inline uintptr_t RightElbow    = 0x4E0;
         static inline uintptr_t LeftElbow     = 0x4E4;
 
-        // alias cũ — để Visual.cpp không gãy
-        static inline uintptr_t LeftWrist     = 0x4DC; // dùng LeftHand
-        static inline uintptr_t LeftAnkle     = 0x4C0; // dùng LeftFoot
-        static inline uintptr_t RightAnkle    = 0x4C4; // dùng RightFoot
-        static inline uintptr_t Hand          = 0x4D8; // dùng RightHand
+        static inline uintptr_t LeftWrist     = 0x4DC;
+        static inline uintptr_t LeftAnkle     = 0x4C0;
+        static inline uintptr_t RightAnkle    = 0x4C4;
+        static inline uintptr_t Hand          = 0x4D8;
         static inline uintptr_t RootBone      = 0x4B0;
         static inline uintptr_t Groin         = 0x4A0;
     };
