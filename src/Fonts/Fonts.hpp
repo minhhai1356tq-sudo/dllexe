@@ -2,7 +2,7 @@
 
 #include <imgui.h>
 #include <d3d11.h>
-#include <d3dx11.h>
+// Đã xóa #include <d3dx11.h> vì VS2022 không hỗ trợ
 
 namespace FWork {
 	namespace Fonts {
