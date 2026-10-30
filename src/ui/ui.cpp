@@ -1,25 +1,30 @@
 #include "ui.hpp"
-#include <imgui.h>
-#include <imgui_impl_win32.h>
-#include <imgui_impl_dx11.h>
+// Sửa lại đường dẫn include ImGui trỏ đúng vào thư mục tự tải về
+#include "imgui/imgui.h"
+#include "imgui/backends/imgui_impl_win32.h"
+#include "imgui/backends/imgui_impl_dx11.h"
 #include <src/Overlay/Overlay.hpp>
 #include <src/Globals.hpp>
 #include <src/Fonts/FontInter.hpp>
-#include <imgui_internal.h>
+#include <imgui/imgui_internal.h>
 #include <src/Fonts/FontAwesome.hpp>
 #include <src/Fonts/Fonts.hpp>
 #include <thread>
 #include <Auth/auth.hpp>
 #define CURL_STATICLIB
 #include "Auth/Curl/curl.h"
-#include "src\Fonts\Fonts.hpp"
+#include "src/Fonts/Fonts.hpp"
 #include <FontAwesome6.hpp>
 #include "Logo.hpp"
 #include <lmcons.h>
-#include <sstream>    // para std::stringstream
-#include <iomanip>    // para std::put_time
-#include <chrono>     // para std::chrono::system_clock
-#include <ctime>      // para std::time_t e std::tm
+#include <sstream>
+#include <iomanip>
+#include <chrono>
+#include <ctime>
+#include <d3d11.h>
+#include <wincodec.h>
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "windowscodecs.lib")
 
 static inline ImVec2 Size = ImVec2(640, 440);
 
@@ -100,7 +105,66 @@ namespace FWork {
 
         Fonts::Initialize(IDevice);
 
-        D3DX11CreateShaderResourceViewFromMemory(g_pd3dDevice, LogoBytes, sizeof(LogoBytes), NULL, NULL, &Logo, NULL);
+        // Sửa lỗi D3DX11CreateShaderResourceViewFromMemory bằng WIC (Windows Imaging Component)
+        // Hàm này sẽ load ảnh từ mảng byte LogoBytes trong Logo.hpp
+        IWICImagingFactory* wicFactory = nullptr;
+        IWICBitmapDecoder* decoder = nullptr;
+        IWICBitmapFrameDecode* frame = nullptr;
+        IWICFormatConverter* converter = nullptr;
+
+        CoInitializeEx(NULL, COINIT_MULTITHREADED);
+        CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory));
+
+        if (wicFactory) {
+            IWICStream* stream = nullptr;
+            wicFactory->CreateStream(&stream);
+            if (stream) {
+                stream->InitializeFromMemory((BYTE*)LogoBytes, sizeof(LogoBytes));
+                if (SUCCEEDED(wicFactory->CreateDecoderFromStream(stream, NULL, WICDecodeMetadataCacheOnDemand, &decoder))) {
+                    if (SUCCEEDED(decoder->GetFrame(0, &frame))) {
+                        wicFactory->CreateFormatConverter(&converter);
+                        if (converter) {
+                            converter->Initialize(frame, GUID_WICPixelFormat32bppRGBA, WICBitmapDitherTypeNone, NULL, 0.0, WICBitmapPaletteTypeCustom);
+                            
+                            UINT width, height;
+                            converter->GetSize(&width, &height);
+                            std::vector<BYTE> pixels(width * height * 4);
+                            converter->CopyPixels(NULL, width * 4, (UINT)pixels.size(), pixels.data());
+
+                            D3D11_TEXTURE2D_DESC desc = {};
+                            desc.Width = width;
+                            desc.Height = height;
+                            desc.MipLevels = 1;
+                            desc.ArraySize = 1;
+                            desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+                            desc.SampleDesc.Count = 1;
+                            desc.Usage = D3D11_USAGE_DEFAULT;
+                            desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+
+                            D3D11_SUBRESOURCE_DATA subResource = {};
+                            subResource.pSysMem = pixels.data();
+                            subResource.SysMemPitch = width * 4;
+
+                            ID3D11Texture2D* texture = nullptr;
+                            if (SUCCEEDED(g_pd3dDevice->CreateTexture2D(&desc, &subResource, &texture))) {
+                                D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+                                srvDesc.Format = desc.Format;
+                                srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+                                srvDesc.Texture2D.MipLevels = 1;
+                                g_pd3dDevice->CreateShaderResourceView(texture, &srvDesc, &Logo);
+                                texture->Release();
+                            }
+                            converter->Release();
+                        }
+                        frame->Release();
+                    }
+                    decoder->Release();
+                }
+                stream->Release();
+            }
+            wicFactory->Release();
+        }
+        CoUninitialize();
 
         InitializeMenu();
     }
@@ -113,7 +177,6 @@ namespace FWork {
     }
 
     void Interface::UpdateStyle() {
-
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -516,232 +579,4 @@ namespace FWork {
                                         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 25 + 35, 0));
                                         ImGui::BeginGroup();
                                         {
-                                            ImGui::CustomChild("Secondary", ImVec2(ImGui::GetWindowSize().x / 2 - 25, 330));
-                                            {
-                                                ImGui::ColorEdit4("Enemies Detected Color", g_Globals.Visuals.EnemyColor, ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs);
-                                                ImGui::ColorEdit4("Watermark Color", g_Globals.Visuals.WatermarkColor, ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs);
-                                                ImGui::ColorEdit4("Enemies Knocked Color", g_Globals.Visuals.WatermarkColor, ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs);
-                                                ImGui::ColorEdit4("Weapons Text Color", g_Globals.Visuals.ESPWeaponColor, ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs);
-                                                ImGui::ColorEdit4("Filled Box Color", g_Globals.Visuals.Filledboxcolor, ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs);
-                                                ImGui::ColorEdit4("Target Color", g_Globals.Visuals.AlvoColor, ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs);
-                                            }
-                                            ImGui::EndCustomChild();
-                                        }
-                                        ImGui::EndGroup();
-                                    }
-                                    ImGui::EndGroup();
-                                }
-                            }
-                            ImGui::EndChild();
-                        }
-                        else if (CurrentTab == 4) // Misc
-                        {
-                            static int LastCurrentSub = 0;
-                            static int CurrentSub = 0;
-
-                            static float Anima = 0.f;
-
-                            if (LastCurrentSub > CurrentSub) // Trocou
-                            {
-                                Anima = -460.f;
-                                LastCurrentSub = CurrentSub;
-                            }
-                            else if (LastCurrentSub < CurrentSub)
-                            {
-                                Anima = 460.f;
-                                LastCurrentSub = CurrentSub;
-                            }
-
-                            Anima = ImLerp(Anima, 0.f, 0.1f);
-
-                            ImGui::SetCursorPos(ImVec2(20, 35));
-                            ImGui::SearchBar("SearchBar", ImVec2(250, 35));
-                            ImGui::SetCursorPos(ImVec2(Anima, 85));
-                            ImGui::BeginChild("Misc");
-                            {
-                                ImGui::SetCursorPos(ImVec2(20, 0));
-                                ImGui::BeginGroup();
-                                {
-                                    ImGui::CustomChild("Settings", ImVec2(ImGui::GetWindowSize().x / 2 - 25, 330));
-                                    {
-                                        ImGui::Checkbox("Stream Mode", &g_Globals.General.Capture);
-                                        static const char* priority_items[] = { "High", "Normal", "Low" };
-                                        static int current_priority = static_cast<int>(g_Globals.Silent.HitBox);
-                                        if (ImGui::Combo("Process Priority", &current_priority, priority_items, IM_ARRAYSIZE(priority_items))) {
-                                            g_Globals.General.Priority = static_cast<Config::Priority>(current_priority);
-                                            HANDLE hProcess = GetCurrentProcess();
-                                            DWORD priorityClass = NORMAL_PRIORITY_CLASS;
-                                            switch (current_priority) {
-                                            case 0: // High
-                                                priorityClass = HIGH_PRIORITY_CLASS;
-                                                break;
-                                            case 1: // Normal
-                                                priorityClass = NORMAL_PRIORITY_CLASS;
-                                                break;
-                                            case 2: // Low
-                                                priorityClass = IDLE_PRIORITY_CLASS;
-                                                break;
-                                            }
-                                            if (!SetPriorityClass(hProcess, priorityClass)) {
-                                                std::cerr << "Erro ao mudar prioridade! " << GetLastError() << std::endl;
-                                            }
-                                        }
-                                        ImGui::SliderInt("Delay", &g_Globals.General.Delay, 0, 100, "%dms");
-                                        ImGui::SliderFloat("Logo Scale", &g_Globals.Visuals.LogoScale, 0.10f, 1.00f, "%.2f");
-                                        ImGui::KeyBind("Keybind Menu", &g_Globals.General.MenuKey, 0);
-                                    }
-                                    ImGui::EndCustomChild();
-
-                                    ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 25 + 35, 0));
-                                    ImGui::BeginGroup();
-                                    {
-                                        ImGui::CustomChild("Bypass Screen", ImVec2(ImGui::GetWindowSize().x / 2 - 25, 330));
-                                        {
-                                            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.184f, 0.424f, 0.6f, 1.0f));
-                                            ImGui::Text("Learn Please:");
-                                            ImGui::PopStyleColor();
-                                            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f, 1.0f));
-                                            ImGui::Text("By clicking on the button you\nunload the panel and\nall the functions\nbut if you want\nyou can inject them again!");
-                                            ImGui::PopStyleColor();
-                                            if (ImGui::Button("Unload Menu"))
-                                            {
-                                                g_Globals.General.ShutDown = true;
-                                            }
-                                        }
-                                        ImGui::EndCustomChild();
-                                    }
-                                    ImGui::EndGroup();
-                                }
-                                ImGui::EndGroup();
-                            }
-                        }
-                        else if (CurrentTab == 5) // Configs
-                        {
-                            static int LastCurrentSub = 0;
-                            static int CurrentSub = 0;
-
-                            static float Anima = 0.f;
-
-                            if (LastCurrentSub > CurrentSub) // Trocou
-                            {
-                                Anima = -460.f;
-                                LastCurrentSub = CurrentSub;
-                            }
-                            else if (LastCurrentSub < CurrentSub)
-                            {
-                                Anima = 460.f;
-                                LastCurrentSub = CurrentSub;
-                            }
-
-                            Anima = ImLerp(Anima, 0.f, 0.1f);
-
-                            ImGui::SetCursorPos(ImVec2(20, 35));
-                            ImGui::SearchBar("SearchBar", ImVec2(250, 35));
-                            ImGui::SetCursorPos(ImVec2(Anima, 85));
-                            ImGui::BeginChild("Configs");
-                            {
-                                ImGui::SetCursorPos(ImVec2(20, 0));
-                                ImGui::BeginGroup();
-                                {
-                                    ImGui::CustomChild("Cloud Config", ImVec2(ImGui::GetWindowSize().x / 2 - 25, 330));
-                                    {
-                                        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f, 1.0f));
-
-                                        const char* text = "In Maintenance...";
-                                        ImVec2 text_size = ImGui::CalcTextSize(text);
-
-                                        float child_width = ImGui::GetContentRegionAvail().x;
-                                        float child_height = ImGui::GetContentRegionAvail().y;
-
-                                        float text_x = (child_width - text_size.x) * 0.5f;
-                                        float text_y = (child_height - text_size.y) * 0.5f;
-
-                                        ImGui::SetCursorPos(ImVec2(text_x, text_y));
-
-                                        ImGui::Text("%s", text);
-
-                                        ImGui::PopStyleColor();
-                                    }
-                                    ImGui::EndCustomChild();
-
-                                    ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 25 + 35, 0));
-                                    ImGui::BeginGroup();
-                                    {
-                                        ImGui::CustomChild("User Info", ImVec2(ImGui::GetWindowSize().x / 2 - 25, 130));
-                                        {
-                                            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.184f, 0.424f, 0.6f, 1.0f));
-                                            ImGui::Text("User Information:");
-                                            ImGui::PopStyleColor();
-                                            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f, 1.0f));
-                                            std::string username = GetUsername();
-                                            ImGui::Text("Username: %s", username.c_str());
-                                            //std::string expiry_text = GetExpiryString();
-                                            ImGui::Text("Expiry: Lifetime");
-                                            ImGui::Text("Dev: nash (85hz)");
-                                            ImGui::PopStyleColor();
-                                        }
-                                        ImGui::EndCustomChild();
-                                    }
-                                    ImGui::EndGroup();
-                                }
-                                ImGui::EndGroup();
-                            }
-                        }
-                    }
-
-                    ImGui::EndChild();
-                    DrawList->AddRect(Pos, Pos + Size, ImGui::GetColorU32(ImGuiCol_Border), ImGui::GetStyle().WindowRounding);
-                }
-                ImGui::End();
-            }
-        }
-    }
-
-    void Interface::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-        switch (uMsg) {
-        case WM_SIZE:
-            if (wParam != SIZE_MINIMIZED) {
-                ResizeWidht = (UINT)LOWORD(lParam);
-                ResizeHeight = (UINT)HIWORD(lParam);
-            }
-            break;
-        }
-
-        if (bIsMenuOpen) {
-            ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
-        }
-    }
-
-    void Interface::HandleMenuKey()
-    {
-        static bool MenuKeyDown = false;
-        if (GetAsyncKeyState(g_Globals.General.MenuKey) & 0x8000)
-        {
-            if (!MenuKeyDown)
-            {
-                MenuKeyDown = true;
-                bIsMenuOpen = !bIsMenuOpen;
-
-                if (bIsMenuOpen) {
-                    SetWindowLong(hWindow, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE);
-                    SetForegroundWindow(hWindow);
-                }
-                else {
-                    SetWindowLong(hWindow, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_LAYERED | WS_EX_NOACTIVATE);
-                    SetForegroundWindow(hTargetWindow);
-                }
-                SetWindowPos(hWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
-            }
-        }
-        else {
-            MenuKeyDown = false;
-        }
-    }
-
-    void Interface::ShutDown() {
-        ImGui_ImplDX11_Shutdown();
-        ImGui_ImplWin32_Shutdown();
-        ImGui::DestroyContext();
-        Overlay::ShutDown();
-    }
-}
+                                            ImGui::CustomChild("Secondary", ImVec2
