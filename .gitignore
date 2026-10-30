@@ -1,0 +1,52 @@
+﻿# build output
+*.dll
+*.exe
+*.pdb
+*.ilk
+*.obj
+*.lib
+*.exp
+*.idb
+*.pch
+*.ipch
+*.tlog
+*.lastbuildstate
+*.log
+
+# VS
+.vs/
+x64/
+x86/
+Debug/
+Release/
+bin/
+obj/
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+ipch/
+
+# dump + data
+*.rar
+*.zip
+dump.cs
+dump.txt
+FF V7A DUMP.rar
+global-metadata.dat
+libil2cpp.so
+libunity.so
+
+# runtime artifacts
+imgui.ini
+kl.log
+targets.txt
+*.bin
+*.cache
+
+# bluestacks / emulator
+BlueStacks*
+HD-Player*
+Bstk*
