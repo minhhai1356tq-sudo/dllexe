@@ -1,14 +1,9 @@
 #ifndef ADB_HPP
 #define ADB_HPP
 
-#include <Poco/Process.h>
-#include <Poco/Pipe.h>
-#include <Poco/PipeStream.h>
-#include <Poco/Exception.h>
-#include <Poco/Thread.h>
-#include <TlHelp32.h>
-#include <sstream>
 #include <string>
+#include <vector>
+#include <cstdint>
 
 namespace FWork {
     class Adb {
