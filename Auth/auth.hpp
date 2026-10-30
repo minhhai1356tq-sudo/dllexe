@@ -4,7 +4,6 @@
 #include <windows.h>
 #include <iostream>
 #include <string>
-#include <atlsecurity.h>
 #include "json.hpp"
 
 #pragma comment(lib, "ws2_32.lib")
@@ -27,11 +26,13 @@ private:
     }
 
     static std::string get_hwid() {
-        ATL::CAccessToken accessToken;
-        ATL::CSid currentUserSid;
-        if (accessToken.GetProcessToken(TOKEN_READ | TOKEN_QUERY) &&
-            accessToken.GetUser(&currentUserSid))
-            return std::string(CT2A(currentUserSid.Sid()));
+        // Láº¥y Volume Serial Number cá»§a á»• C:
+        DWORD volumeSerial = 0;
+        if (GetVolumeInformationA("C:\\", NULL, 0, &volumeSerial, NULL, NULL, NULL, 0)) {
+            char buf[32];
+            sprintf_s(buf, "%08X", volumeSerial);
+            return std::string(buf);
+        }
         return "none";
     }
 
@@ -92,7 +93,7 @@ public:
     struct response_t {
         bool success;
         std::string message;
-    } response;  // Novo campo para armazenar a resposta de sucesso/erro
+    } response;
 
     inline auto setup() -> std::string {
         std::string postfields = ("type=init&ver=") + version +
@@ -105,16 +106,16 @@ public:
             json response_json = json::parse(response);
             if (response_json["success"].get<bool>()) {
                 sessionid = response_json["sessionid"].get<std::string>();
-                response_t res = { true, "success" };  // Setando a resposta
+                response_t res = { true, "success" };
                 this->response = res;
                 return "success";
             }
-            response_t res = { false, response_json["message"].get<std::string>() };  // Setando a resposta
+            response_t res = { false, response_json["message"].get<std::string>() };
             this->response = res;
             return response_json["message"].get<std::string>();
         }
         catch (json::parse_error&) {
-            response_t res = { false, "failed to parse server response." };  // Setando a resposta
+            response_t res = { false, "failed to parse server response." };
             this->response = res;
             return "failed to parse server response.";
         }
@@ -122,7 +123,7 @@ public:
 
     inline auto Login(const std::string username, const std::string password) -> std::string {
         if (sessionid.empty()) {
-            response_t res = { false, "Session not initialized. Call setup() first." };  // Setando a resposta
+            response_t res = { false, "Session not initialized. Call setup() first." };
             this->response = res;
             return "Session not initialized. Call setup() first.";
         }
@@ -148,16 +149,16 @@ public:
                     client.sub_type.expire_date = sub["expiry"].get<std::string>();
                     client.sub_type.active = true;
                 }
-                response_t res = { true, "success" };  // Setando a resposta
+                response_t res = { true, "success" };
                 this->response = res;
                 return "success";
             }
-            response_t res = { false, response_json["message"].get<std::string>() };  // Setando a resposta
+            response_t res = { false, response_json["message"].get<std::string>() };
             this->response = res;
             return response_json["message"].get<std::string>();
         }
         catch (json::parse_error& e) {
-            response_t res = { false, "Erro ao processar a resposta do servidor: " + std::string(e.what()) };  // Setando a resposta
+            response_t res = { false, "Erro ao processar a resposta do servidor: " + std::string(e.what()) };
             this->response = res;
             return "Erro ao processar a resposta do servidor: " + std::string(e.what());
         }
@@ -165,7 +166,7 @@ public:
 
     inline auto Register_key(const std::string username, const std::string password, const std::string& key) -> std::string {
         if (sessionid.empty()) {
-            response_t res = { false, "Session not initialized. Call setup() first." };  // Setando a resposta
+            response_t res = { false, "Session not initialized. Call setup() first." };
             this->response = res;
             return ("Session not initialized. Call setup() first.");
         }
@@ -192,16 +193,16 @@ public:
                     client.sub_type.expire_date = sub[("expiry")].get<std::string>();
                     client.sub_type.active = true;
                 }
-                response_t res = { true, "success" };  // Setando a resposta
+                response_t res = { true, "success" };
                 this->response = res;
                 return ("success");
             }
-            response_t res = { false, response_json[("message")].get<std::string>() };  // Setando a resposta
+            response_t res = { false, response_json[("message")].get<std::string>() };
             this->response = res;
             return response_json[("message")].get<std::string>();
         }
         catch (json::parse_error& e) {
-            response_t res = { false, "Erro ao processar a resposta do servidor: " + std::string(e.what()) };  // Setando a resposta
+            response_t res = { false, "Erro ao processar a resposta do servidor: " + std::string(e.what()) };
             this->response = res;
             return ("Erro ao processar a resposta do servidor: ") + std::string(e.what());
         }
@@ -210,15 +211,12 @@ public:
     std::string parse_date_dual(const std::string& timestamp) {
         if (timestamp.empty()) return "Invalid date";
 
-        // Converter string -> time_t
         time_t expire_time = std::stoll(timestamp);
         time_t now = std::time(nullptr);
 
-        // Calcular diferença em dias
         double diff_seconds = difftime(expire_time, now);
         int diff_days = static_cast<int>(diff_seconds / (60 * 60 * 24));
 
-        // Converter expiração para struct tm
         std::tm tm_local = {};
         localtime_s(&tm_local, &expire_time);
 
