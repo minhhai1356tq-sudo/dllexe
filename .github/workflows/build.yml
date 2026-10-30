@@ -16,6 +16,10 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
 
+    - name: Install DirectX SDK (June 2010)
+      run: |
+        choco install directx-sdk -y
+
     - name: Build with MSBuild
       run: msbuild dllexe.sln /p:Configuration=Release /p:Platform=Win32
 
