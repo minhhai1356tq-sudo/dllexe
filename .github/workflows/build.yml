@@ -25,6 +25,12 @@ jobs:
         Expand-Archive -Path "imgui.zip" -DestinationPath "."
         Rename-Item -Path "imgui-1.90.9" -NewName "imgui"
 
+    - name: Download MinHook
+      run: |
+        Invoke-WebRequest -Uri "https://github.com/TsudaKageyu/minhook/archive/refs/tags/v1.3.4.zip" -OutFile "minhook.zip"
+        Expand-Archive -Path "minhook.zip" -DestinationPath "."
+        Rename-Item -Path "minhook-1.3.4" -NewName "minhook"
+
     - name: Build with MSBuild
       run: msbuild dllexe.sln /p:Configuration=Release /p:Platform=Win32
 
