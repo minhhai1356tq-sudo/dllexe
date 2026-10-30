@@ -1,11 +1,14 @@
-﻿#include <windows.h>
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
+#include <windows.h>
+// Sửa lại đường dẫn include trỏ đúng vào thư mục imgui tự tải về
+#include "imgui/imgui.h"
+#include "imgui/backends/imgui_impl_win32.h"
+#include "imgui/backends/imgui_impl_dx11.h"
 #include <d3d11.h>
-#include <D3DX11tex.h>
-#pragma comment(lib, "D3DX11.lib")
+// Đã xóa D3DX11tex.h và D3DX11.lib vì VS2022 không hỗ trợ, tránh lỗi linker
+#include <D3DCompiler.h>
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
+
 #include <thread>
 #include <iostream>
 #include <atomic> 
@@ -21,8 +24,11 @@
 #include <EspLines/Offsets.hpp>
 #include <EspLines/Features/Visuals/Visual.hpp>
 #include <src/adb/adb_utils.hpp>
-#include <EspLines\Aimbot\Aimbot.hpp>
+#include <EspLines/Aimbot/Aimbot.hpp>
 #include <src/ui/ui.hpp>
+
+// Fix lỗi undeclared identifier cho hWindow
+HWND hWindow = nullptr;
 
 void initcmd() {
 	AllocConsole();
@@ -43,6 +49,7 @@ void closecmd() {
 
 HMODULE g_hModule;
 FWork::Interface* g_pInterface = nullptr;
+
 DWORD WINAPI Unload() {
 	if (g_pInterface) {
 		g_pInterface->ShutDown();
@@ -69,6 +76,7 @@ DWORD WINAPI Unload() {
 }
 
 bool memoryinit = false;
+
 void Memoryy() {
 	auto vmm = GetModuleHandleA("BstkVMM.dll");
 	if (vmm == nullptr) {
@@ -217,12 +225,19 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
     return 0;
 }
 
+// Tạo wrapper thread để tránh lỗi ép kiểu LPTHREAD_START_ROUTINE
+DWORD WINAPI MainThread(LPVOID lpParam) {
+	wWinMain((HINSTANCE)lpParam, NULL, NULL, 0);
+	return 0;
+}
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
     switch (ul_reason_for_call) {
     case DLL_PROCESS_ATTACH:
         g_hModule = hModule;
         DisableThreadLibraryCalls(hModule);
-        CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)wWinMain, hModule, 0, NULL);
+        // Gọi hàm wrapper thay vì gọi trực tiếp wWinMain
+        CreateThread(NULL, 0, MainThread, hModule, 0, NULL);
         break;
     case DLL_PROCESS_DETACH:
 		g_Globals.General.ShutDown = true;
@@ -230,4 +245,3 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     }
     return TRUE;
 }
-
