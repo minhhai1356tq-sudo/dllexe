@@ -22,9 +22,9 @@ void DrawVerticalHealthBar(int entityId, short CurrentHealth, short MaxHealth, I
     if (MaxHealth <= 0) return;
     ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
     const float BarWidth = 6.0f, Rounding = 3.0f, AnimationSpeed = 15.0f, BorderThickness = 1.0f;
-    float HealthPercentage = std::clamp((float)CurrentHealth / MaxHealth, 0.0f, 1.0f);
+    float HealthPercentage = (std::clamp)((float)CurrentHealth / MaxHealth, 0.0f, 1.0f);
     float& AnimatedHealth = g_animatedHealth[entityId];
-    float lerpFactor = std::min(1.0f, ImGui::GetIO().DeltaTime * AnimationSpeed);
+    float lerpFactor = (std::min)(1.0f, ImGui::GetIO().DeltaTime * AnimationSpeed);
     AnimatedHealth = ImLerp(AnimatedHealth, HealthPercentage, lerpFactor);
     ImVec2 innerPos(Position.x + BorderThickness, Position.y + BorderThickness);
     float innerWidth = BarWidth - 2 * BorderThickness;
@@ -42,9 +42,9 @@ void DrawHorizontalHealthBar(int entityId, short CurrentHealth, short MaxHealth,
     if (MaxHealth <= 0) return;
     ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
     const float BarHeight = 6.0f, Rounding = 3.0f, AnimationSpeed = 15.0f, BorderThickness = 1.0f;
-    float HealthPercentage = std::clamp((float)CurrentHealth / MaxHealth, 0.0f, 1.0f);
+    float HealthPercentage = (std::clamp)((float)CurrentHealth / MaxHealth, 0.0f, 1.0f);
     float& AnimatedHealth = g_animatedHealth[entityId];
-    float lerpFactor = std::min(1.0f, ImGui::GetIO().DeltaTime * AnimationSpeed);
+    float lerpFactor = (std::min)(1.0f, ImGui::GetIO().DeltaTime * AnimationSpeed);
     AnimatedHealth = ImLerp(AnimatedHealth, HealthPercentage, lerpFactor);
     ImVec2 innerPos(Position.x + BorderThickness, Position.y + BorderThickness);
     float innerWidth = TotalWidth - 2 * BorderThickness;
@@ -151,7 +151,7 @@ void ESP::Players() {
         if (g_Globals.Visuals.Skeleton) {
             ImColor SkeletonColor = ImColor(g_Globals.Visuals.SkeletonColor[0], g_Globals.Visuals.SkeletonColor[1], g_Globals.Visuals.SkeletonColor[2], g_Globals.Visuals.SkeletonColor[3]);
             ImColor IsKnockedColor = player.IsKnocked ? ImColor(1.f,0.f,0.f,1.f) : SkeletonColor;
-            float headRadius = std::clamp(100.0f / player.Distance, 0.5f, 1.5f) * 2.0f;
+            float headRadius = (std::clamp)(100.0f / player.Distance, 0.5f, 1.5f) * 2.0f;
             auto dl = ImGui::GetBackgroundDrawList();
             auto Bone = [&](const ImVec2& a, const ImVec2& b) { dl->AddLine(a, b, IsKnockedColor, g_Globals.Visuals.Thickness); };
             dl->AddCircle(headPos, headRadius, IsKnockedColor, 0, g_Globals.Visuals.Thickness);
@@ -181,7 +181,7 @@ void ESP::Players() {
             drawList->AddText(ImVec2(combinedPosition.x + 1, combinedPosition.y + 1), shadowColor, healthLabel);
             drawList->AddText(combinedPosition, whiteColor, healthLabel);
 
-            float healthPercentage = std::clamp((float)player.Health / 200.0f, 0.0f, 1.0f);
+            float healthPercentage = (std::clamp)((float)player.Health / 200.0f, 0.0f, 1.0f);
             ImVec4 greenColor(0,1,0,1), yellowColor(1,1,0,1), redColor(1,0,0,1);
             ImVec4 healthBarColor;
             if (healthPercentage > 0.5f) healthBarColor = ImLerp(greenColor, yellowColor, (1.0f - healthPercentage) * 2.0f);
