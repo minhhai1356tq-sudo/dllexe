@@ -1,0 +1,30 @@
+name: Build DLL
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build with MSBuild
+      run: msbuild main.cpp /p:Configuration=Release /p:Platform=x64
+
+    - name: Upload DLL artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dlllexe-x64
+        path: |
+          **/*.dll
+          **/*.lib
+          **/*.pdb
+        if-no-files-found: error
