@@ -46,8 +46,8 @@
   
   <!-- CẤU HÌNH INCLUDE VÀ LIB CHO CẢ 2 CONFIG -->
   <PropertyGroup>
-    <IncludePath>$(ProjectDir);$(ProjectDir)include;$(ProjectDir)imgui;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)minhook\include;$(ProjectDir)imgui;$(ProjectDir)imgui\backends;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)minhook\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -61,7 +61,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>user32.lib;d3d11.lib;D3DX11.lib;D3DCompiler.lib;MinHook.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <!-- Đã xóa D3DX11.lib và MinHook.x86.lib -->
+      <AdditionalDependencies>user32.lib;d3d11.lib;D3DCompiler.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,7 +80,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>user32.lib;d3d11.lib;D3DX11.lib;D3DCompiler.lib;MinHook.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <!-- Đã xóa D3DX11.lib và MinHook.x86.lib -->
+      <AdditionalDependencies>user32.lib;d3d11.lib;D3DCompiler.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
 
@@ -94,15 +96,16 @@
     <ClCompile Include="imgui\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_dx11.cpp" />
     
-    <!-- MinHook -->
-    <ClCompile Include="include\MinHook\src\*.c" />
+    <!-- MinHook từ source tự tải -->
+    <ClCompile Include="minhook\src\*.c" />
     
-    <!-- Source của mày (Thêm các file .cpp mày có vào đây) -->
-    <!-- Ví dụ: <ClCompile Include="src\Overlay\Overlay.cpp" /> -->
+    <!-- Source của mày -->
+    <ClCompile Include="src\adb\adb.cpp" />
+    <ClCompile Include="src\Overlay\Overlay.cpp" />
+    <!-- Nếu mày có thêm file .cpp nào khác trong src hay EspLines, hãy thêm vào đây -->
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Khai báo thư mục chứa header để IntelliSense và compiler không báo lỗi -->
     <ClInclude Include="**\*.hpp" />
     <ClInclude Include="**\*.h" />
   </ItemGroup>
