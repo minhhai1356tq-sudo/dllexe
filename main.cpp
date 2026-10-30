@@ -14,7 +14,8 @@
 #include <atomic> 
 #include <string>
 #include <vector>
-#include <include/MinHook.h>
+// SỬA DÒNG NÀY: Trỏ đúng vào thư mục minhook tự tải về
+#include "minhook/include/MinHook.h"
 #include <TlHelp32.h>
 #include <src/adb/adb.hpp>
 #include <src/Overlay/Overlay.hpp>
