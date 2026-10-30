@@ -1,10 +1,10 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <windows.h>
 // Sửa lại đường dẫn include trỏ đúng vào thư mục imgui tự tải về
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_win32.h"
 #include "imgui/backends/imgui_impl_dx11.h"
 #include <d3d11.h>
-// Đã xóa D3DX11tex.h và D3DX11.lib vì VS2022 không hỗ trợ, tránh lỗi linker
 #include <D3DCompiler.h>
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
@@ -14,7 +14,6 @@
 #include <atomic> 
 #include <string>
 #include <vector>
-// SỬA DÒNG NÀY: Trỏ đúng vào thư mục minhook tự tải về
 #include "minhook/include/MinHook.h"
 #include <TlHelp32.h>
 #include <src/adb/adb.hpp>
