@@ -10,7 +10,7 @@
 
 #include <thread>
 #include <iostream>
-#include <atomic> 
+#include <atomic>
 #include <string>
 #include <vector>
 #include "minhook/include/MinHook.h"
@@ -26,229 +26,192 @@
 #include <EspLines/Aimbot/Aimbot.hpp>
 #include <src/ui/ui.hpp>
 
-// KHÔNG khai báo HWND hWindow ở đây vì đã có trong Overlay.cpp
-
 void initcmd() {
-	AllocConsole();
-	SetConsoleOutputCP(CP_UTF8);
-	SetConsoleCP(CP_UTF8);
-	freopen("CONIN$", "r", stdin);
-	freopen("CONOUT$", "w", stdout);
-	freopen("CONOUT$", "w", stderr);
-	SetConsoleTitleA("Debug Console");
+    AllocConsole();
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+    freopen("CONIN$", "r", stdin);
+    freopen("CONOUT$", "w", stdout);
+    freopen("CONOUT$", "w", stderr);
+    SetConsoleTitleA("Debug Console");
 }
 
 void closecmd() {
-	FreeConsole();
-	fclose(stdin);
-	fclose(stdout);
-	fclose(stderr);
+    FreeConsole();
+    fclose(stdin); fclose(stdout); fclose(stderr);
 }
 
 HMODULE g_hModule;
 FWork::Interface* g_pInterface = nullptr;
 
 DWORD WINAPI Unload() {
-	if (g_pInterface) {
-		g_pInterface->ShutDown();
-		delete g_pInterface;
-		g_pInterface = nullptr;
-	}
-
-	if (MemoryUtils::ogPhysRead) {
-		if (MH_DisableHook((LPVOID)MemoryUtils::ogPhysRead) != MH_OK) {
-			std::cout << "Falha ao desativar o hook de PGMPhysRead!" << std::endl;
-		}
-
-		if (MH_RemoveHook((LPVOID)MemoryUtils::ogPhysRead) != MH_OK) {
-			std::cout << "Falha ao remover o hook de PGMPhysRead!" << std::endl;
-		}
-	}
-
-	MH_Uninitialize();
-
-	if (g_hModule) {
-		FreeLibraryAndExitThread(g_hModule, 0);
-	}
-	return 0;
+    if (g_pInterface) {
+        g_pInterface->ShutDown();
+        delete g_pInterface;
+        g_pInterface = nullptr;
+    }
+    if (MemoryUtils::ogPhysRead) {
+        MH_DisableHook((LPVOID)MemoryUtils::ogPhysRead);
+        MH_RemoveHook((LPVOID)MemoryUtils::ogPhysRead);
+    }
+    MH_Uninitialize();
+    if (g_hModule) FreeLibraryAndExitThread(g_hModule, 0);
+    return 0;
 }
 
 bool memoryinit = false;
 
 void Memoryy() {
-	std::cout << "[*] Memoryy started" << std::endl;
-	auto vmm = GetModuleHandleA("BstkVMM.dll");
-	if (vmm == nullptr) {
-		std::cout << "[-] BstkVMM.dll not found" << std::endl;
-		return;
-	}
-	std::cout << "[+] BstkVMM.dll found at: " << vmm << std::endl;
+    std::cout << "[*] Memoryy started" << std::endl;
+    HMODULE vmm = nullptr;
+    // FIX: retry tới ~10s nếu BstkVMM.dll chưa load (inject sớm)
+    for (int i = 0; i < 100 && !vmm; ++i) {
+        vmm = GetModuleHandleA("BstkVMM.dll");
+        if (!vmm) Sleep(100);
+    }
+    if (!vmm) {
+        std::cout << "[-] BstkVMM.dll not found after retry" << std::endl;
+        return;
+    }
+    std::cout << "[+] BstkVMM.dll found at: " << vmm << std::endl;
 
-	auto readFunc = (MemoryUtils::PGMPhysReadFunc)GetProcAddress(vmm, "PGMPhysRead");
-	if (readFunc == nullptr) {
-		std::cout << "[-] PGMPhysRead not found" << std::endl;
-		return;
-	}
-	std::cout << "[+] PGMPhysRead found at: " << readFunc << std::endl;
+    auto readFunc = (MemoryUtils::PGMPhysReadFunc)GetProcAddress(vmm, "PGMPhysRead");
+    if (!readFunc) { std::cout << "[-] PGMPhysRead not found" << std::endl; return; }
 
-	MH_Initialize();
-	if (MH_CreateHook((LPVOID)readFunc, MemoryUtils::HookedPGMPhysRead, (LPVOID*)&MemoryUtils::ogPhysRead) != MH_OK) {
-		std::cout << "[-] MH_CreateHook failed" << std::endl;
-		return;
-	}
-	std::cout << "[+] Hook created" << std::endl;
+    if (MH_Initialize() != MH_OK) { std::cout << "[-] MH_Initialize failed" << std::endl; return; }
+    if (MH_CreateHook((LPVOID)readFunc, MemoryUtils::HookedPGMPhysRead, (LPVOID*)&MemoryUtils::ogPhysRead) != MH_OK) {
+        std::cout << "[-] MH_CreateHook failed" << std::endl; return;
+    }
+    if (MH_EnableHook((LPVOID)readFunc) != MH_OK) {
+        std::cout << "[-] MH_EnableHook failed" << std::endl; return;
+    }
+    std::cout << "[+] Hook enabled, waiting for vmPtr..." << std::endl;
 
-	if (MH_EnableHook((LPVOID)readFunc) != MH_OK) {
-		std::cout << "[-] MH_EnableHook failed" << std::endl;
-		return;
-	}
-	std::cout << "[+] Hook enabled, waiting for vmPtr..." << std::endl;
+    int elapsed = 0;
+    while (MemoryUtils::vmPtr == nullptr && elapsed < 10000) { Sleep(1); elapsed++; }
+    if (MemoryUtils::vmPtr == nullptr) {
+        std::cout << "[-] Timeout waiting for vmPtr" << std::endl; return;
+    }
+    std::cout << "[+] vmPtr found" << std::endl;
 
-	int timeout = 5000;
-	int elapsed = 0;
+    MemoryUtils::ogCPU = (MemoryUtils::VMMGetCpuByIdFunc)GetProcAddress(vmm, "VMMGetCpuById");
+    MemoryUtils::ogCast = (MemoryUtils::PGMPhysGCPtr2GCPhysFunc)GetProcAddress(vmm, "PGMPhysGCPtr2GCPhys");
+    MemoryUtils::ogWrite = (MemoryUtils::PGMPhysSimpleWriteGCPhysFunc)GetProcAddress(vmm, "PGMPhysSimpleWriteGCPhys");
+    if (!MemoryUtils::ogCPU || !MemoryUtils::ogCast || !MemoryUtils::ogWrite) {
+        std::cout << "[-] Missing required VMM exports" << std::endl; return;
+    }
 
-	while (MemoryUtils::vmPtr == nullptr && elapsed < timeout) {
-		Sleep(1);
-		elapsed++;
-	}
-
-	if (MemoryUtils::vmPtr == nullptr) {
-		std::cout << "[-] Timeout waiting for vmPtr" << std::endl;
-		return;
-	}
-	std::cout << "[+] vmPtr found" << std::endl;
-
-	MemoryUtils::ogCPU = (MemoryUtils::VMMGetCpuByIdFunc)GetProcAddress(vmm, "VMMGetCpuById");
-	if (MemoryUtils::ogCPU == nullptr) {
-		std::cout << "[-] VMMGetCpuById not found" << std::endl;
-		return;
-	}
-	std::cout << "[+] VMMGetCpuById found" << std::endl;
-
-	MemoryUtils::ogCast = (MemoryUtils::PGMPhysGCPtr2GCPhysFunc)GetProcAddress(vmm, "PGMPhysGCPtr2GCPhys");
-	if (MemoryUtils::ogCast == nullptr) {
-		std::cout << "[-] PGMPhysGCPtr2GCPhys not found" << std::endl;
-		return;
-	}
-	std::cout << "[+] PGMPhysGCPtr2GCPhys found" << std::endl;
-
-	MemoryUtils::ogWrite = (MemoryUtils::PGMPhysSimpleWriteGCPhysFunc)GetProcAddress(vmm, "PGMPhysSimpleWriteGCPhys");
-	if (MemoryUtils::ogWrite == nullptr) {
-		std::cout << "[-] PGMPhysSimpleWriteGCPhys not found" << std::endl;
-		return;
-	}
-	std::cout << "[+] PGMPhysSimpleWriteGCPhys found" << std::endl;
-
-	MemoryUtils::Initialize(MemoryUtils::vmPtr);
-	std::cout << "[+] Virt Memory initialized: " << MemoryUtils::pVMAddr << std::endl;
-
-	memoryinit = true;
-	std::cout << "[+] Memoryy finished successfully" << std::endl;
+    MemoryUtils::Initialize(MemoryUtils::vmPtr);
+    std::cout << "[+] Virt Memory initialized: " << MemoryUtils::pVMAddr << std::endl;
+    memoryinit = true;
 }
 
 namespace Cheat {
-	void Initialize() {
-		FWork::Overlay::Setup(Render::FindRenderWindow());
-		FWork::Overlay::Initialize();
-		Memoryy();
-		if (!memoryinit) {
-			MessageBox(nullptr, L"Memory initialization failed", L"Error", MB_OK | MB_ICONERROR);
-		}
+    void Initialize() {
+        // FIX: retry tìm render window tới 10s
+        HWND target = nullptr;
+        for (int i = 0; i < 100 && !target; ++i) {
+            target = Render::FindRenderWindow();
+            if (!target) Sleep(100);
+        }
+        if (!target) {
+            std::cout << "[-] Render window not found after retry" << std::endl;
+            return;
+        }
 
-		std::thread([&]() { FWork::ADB::InitializeADB(); }).detach();
+        FWork::Overlay::Setup(target);
+        FWork::Overlay::Initialize();
+        if (!FWork::Overlay::IsInitialized()) {
+            std::cout << "[-] Overlay init failed" << std::endl;
+            return;
+        }
 
-		if (FWork::Overlay::IsInitialized())
-		{
-			FWork::Interface Interface(FWork::Overlay::GetOverlayWindow(), FWork::Overlay::GetTargetWindow(), FWork::Overlay::dxGetDevice(), FWork::Overlay::dxGetDeviceContext());
-			Interface.UpdateStyle();
-			FWork::Overlay::SetupWindowProcHook(std::bind(&FWork::Interface::WindowProc, &Interface, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+        Memoryy();
+        if (!memoryinit) std::cout << "[-] Memory init failed, continuing without ESP" << std::endl;
 
-			MSG Message;
-			ZeroMemory(&Message, sizeof(Message));
-			while (Message.message != WM_QUIT) {
+        std::thread([]() { FWork::ADB::InitializeADB(); }).detach();
 
-				if (PeekMessage(&Message, FWork::Overlay::GetOverlayWindow(), NULL, NULL, PM_REMOVE))
-				{
-					TranslateMessage(&Message);
-					DispatchMessage(&Message);
-				}
+        // FIX: static — tránh dangling this trong WndProc
+        static FWork::Interface Interface(
+            FWork::Overlay::GetOverlayWindow(),
+            FWork::Overlay::GetTargetWindow(),
+            FWork::Overlay::dxGetDevice(),
+            FWork::Overlay::dxGetDeviceContext()
+        );
+        Interface.UpdateStyle();
+        FWork::Overlay::SetupWindowProcHook(
+            std::bind(&FWork::Interface::WindowProc, &Interface,
+                std::placeholders::_1, std::placeholders::_2,
+                std::placeholders::_3, std::placeholders::_4));
 
-				ImGui::GetIO().MouseDrawCursor = Interface.GetMenuOpen();
+        MSG Message;
+        ZeroMemory(&Message, sizeof(Message));
+        while (Message.message != WM_QUIT) {
+            if (PeekMessage(&Message, FWork::Overlay::GetOverlayWindow(), NULL, NULL, PM_REMOVE)) {
+                TranslateMessage(&Message);
+                DispatchMessage(&Message);
+            }
 
-				if (Interface.ResizeHeight != 0 || Interface.ResizeWidht != 0) 
-				{
-					FWork::Overlay::dxCleanupRenderTarget();
-					FWork::Overlay::dxGetSwapChain()->ResizeBuffers(0, Interface.ResizeWidht, Interface.ResizeHeight, DXGI_FORMAT_UNKNOWN, 0);
-					Interface.ResizeHeight = Interface.ResizeWidht = 0;
-					FWork::Overlay::dxCreateRenderTarget();
-				}
+            ImGui::GetIO().MouseDrawCursor = Interface.GetMenuOpen();
 
-				Interface.HandleMenuKey();
-				FWork::Overlay::UpdateWindowPos();
+            if (Interface.ResizeHeight != 0 || Interface.ResizeWidht != 0) {
+                FWork::Overlay::dxCleanupRenderTarget();
+                FWork::Overlay::dxGetSwapChain()->ResizeBuffers(0, Interface.ResizeWidht, Interface.ResizeHeight, DXGI_FORMAT_UNKNOWN, 0);
+                Interface.ResizeHeight = Interface.ResizeWidht = 0;
+                FWork::Overlay::dxCreateRenderTarget();
+            }
 
-				static bool CaptureBypassOn = false;
-				if (g_Globals.General.Capture != CaptureBypassOn) 
-				{
-					CaptureBypassOn = g_Globals.General.Capture;
-					SetWindowDisplayAffinity(FWork::Overlay::GetOverlayWindow(), CaptureBypassOn ? WDA_EXCLUDEFROMCAPTURE : WDA_NONE);
-				}
+            Interface.HandleMenuKey();
+            FWork::Overlay::UpdateWindowPos();
 
-				ImGui_ImplDX11_NewFrame();
-				ImGui_ImplWin32_NewFrame();
-				ImGui::NewFrame();
-				{
-					// FWork::Data::Work(); // ĐÃ COMMENT ĐỂ TEST LỖI
-					
-					Interface.RenderGui();
+            static bool CaptureBypassOn = false;
+            if (g_Globals.General.Capture != CaptureBypassOn) {
+                CaptureBypassOn = g_Globals.General.Capture;
+                SetWindowDisplayAffinity(FWork::Overlay::GetOverlayWindow(),
+                    CaptureBypassOn ? WDA_EXCLUDEFROMCAPTURE : WDA_NONE);
+            }
 
-					// if (g_Globals.Visuals.Enable) { // ĐÃ COMMENT ĐỂ TEST LỖI
-					// 	ESP::Players();
-					// }
+            ImGui_ImplDX11_NewFrame();
+            ImGui_ImplWin32_NewFrame();
+            ImGui::NewFrame();
+            {
+                // FWork::Data::Work();  // tạm comment để test
+                Interface.RenderGui();
+                // if (g_Globals.Visuals.Enable) ESP::Players();  // tạm comment
 
-					if (g_Globals.Misc.ShowAimbotFov) {
-						ImColor OutlineColor = ImColor(g_Globals.Misc.AimbotFovColor[0], g_Globals.Misc.AimbotFovColor[1], g_Globals.Misc.AimbotFovColor[2], g_Globals.Misc.AimbotFovColor[3]);
-						ImColor Fillcolor = ImColor(g_Globals.AimBot.Fillcolor[0],g_Globals.AimBot.Fillcolor[1],g_Globals.AimBot.Fillcolor[2],g_Globals.AimBot.Fillcolor[3]);
-						ImGui::GetBackgroundDrawList()->AddCircleFilled(ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2),g_Globals.AimBot.Fov,Fillcolor,360);
-						ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2),g_Globals.AimBot.Fov,OutlineColor,360);
-					}
+                if (g_Globals.Misc.ShowAimbotFov) {
+                    ImColor OutlineColor(g_Globals.Misc.AimbotFovColor[0], g_Globals.Misc.AimbotFovColor[1], g_Globals.Misc.AimbotFovColor[2], g_Globals.Misc.AimbotFovColor[3]);
+                    ImColor Fillcolor(g_Globals.AimBot.Fillcolor[0], g_Globals.AimBot.Fillcolor[1], g_Globals.AimBot.Fillcolor[2], g_Globals.AimBot.Fillcolor[3]);
+                    ImGui::GetBackgroundDrawList()->AddCircleFilled(ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), g_Globals.AimBot.Fov, Fillcolor, 360);
+                    ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), g_Globals.AimBot.Fov, OutlineColor, 360);
+                }
+            }
+            ImGui::EndFrame();
+            ImGui::Render();
+            FWork::Overlay::dxRefresh();
+            ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+            FWork::Overlay::dxGetSwapChain()->Present(0, 0);
 
-				}
-				ImGui::EndFrame();
-				ImGui::Render();
-				FWork::Overlay::dxRefresh();
-				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-				FWork::Overlay::dxGetSwapChain()->Present(0, 0);
-
-				if (g_Globals.General.ShutDown) {
-					Unload();
-					return;
-				}
-
-				std::this_thread::sleep_for(std::chrono::milliseconds(g_Globals.General.Delay));
-			}
-		}
-	}
+            if (g_Globals.General.ShutDown) { Unload(); return; }
+            std::this_thread::sleep_for(std::chrono::milliseconds(g_Globals.General.Delay));
+        }
+    }
 }
 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
 #ifdef _DEBUG
-	initcmd();
-#endif // _DEBUG
-
-    // Sleep(10000); // Đã xóa dòng này
+    initcmd();
+#endif
     Cheat::Initialize();
-
-	while (!g_Globals.General.ShutDown) {
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	}
-
-	closecmd();
+    while (!g_Globals.General.ShutDown)
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    closecmd();
     return 0;
 }
 
 DWORD WINAPI MainThread(LPVOID lpParam) {
-	wWinMain((HINSTANCE)lpParam, NULL, NULL, 0);
-	return 0;
+    wWinMain((HINSTANCE)lpParam, NULL, NULL, 0);
+    return 0;
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
@@ -259,7 +222,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         CreateThread(NULL, 0, MainThread, hModule, 0, NULL);
         break;
     case DLL_PROCESS_DETACH:
-		g_Globals.General.ShutDown = true;
+        g_Globals.General.ShutDown = true;
         break;
     }
     return TRUE;
