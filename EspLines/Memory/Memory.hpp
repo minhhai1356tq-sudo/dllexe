@@ -16,10 +16,11 @@ public:
 
     inline static std::unordered_map<uintptr_t, uintptr_t> Cache;
 
-    using PGMPhysReadFunc = int(__cdecl*)(void*, uintptr_t, void*, size_t);
+    // SỬA: Đổi uintptr_t thành uint32_t cho các tham số hook của VBox
+    using PGMPhysReadFunc = int(__cdecl*)(void*, uint32_t, void*, size_t);
     using VMMGetCpuByIdFunc = void* (__cdecl*)(void*, int);
-    using PGMPhysGCPtr2GCPhysFunc = int(__cdecl*)(void*, uintptr_t, uintptr_t*);
-    using PGMPhysSimpleWriteGCPhysFunc = int(__cdecl*)(void*, uintptr_t, void*, size_t);
+    using PGMPhysGCPtr2GCPhysFunc = int(__cdecl*)(void*, uint32_t, uint32_t*);
+    using PGMPhysSimpleWriteGCPhysFunc = int(__cdecl*)(void*, uint32_t, void*, size_t);
 
     inline static PGMPhysReadFunc ogPhysRead = nullptr;
     inline static VMMGetCpuByIdFunc ogCPU = nullptr;
@@ -31,7 +32,8 @@ public:
         return size * nmemb;
     }
 
-    static int __cdecl HookedPGMPhysRead(void* pVM, uintptr_t GCPhys, void* pvBuf, size_t cbRead) {
+    // SỬA: Tham số GCPhys giữ nguyên uint32_t
+    static int __cdecl HookedPGMPhysRead(void* pVM, uint32_t GCPhys, void* pvBuf, size_t cbRead) {
         if (!vmPtr) {
             vmPtr = pVM;
             std::cout << "Memory initialized: " << vmPtr << std::endl;
@@ -39,11 +41,11 @@ public:
         return ogPhysRead(pVM, GCPhys, pvBuf, cbRead);
     }
 
-    static int HookWrite(void* pVM, uintptr_t GCPhys, void* pvBuf, size_t cbRead) {
+    static int HookWrite(void* pVM, uint32_t GCPhys, void* pvBuf, size_t cbRead) {
         return ogWrite(pVM, GCPhys, pvBuf, cbRead);
     }
 
-    static int HookRead(void* pVM, uintptr_t GCPhys, void* pvBuf, size_t cbRead) {
+    static int HookRead(void* pVM, uint32_t GCPhys, void* pvBuf, size_t cbRead) {
         return ogPhysRead(pVM, GCPhys, pvBuf, cbRead);
     }
 
@@ -51,7 +53,7 @@ public:
         return ogCPU(pVM, cpuId);
     }
 
-    static int Cast(void* pVCpu, uintptr_t address, uintptr_t* physAddress) {
+    static int Cast(void* pVCpu, uint32_t address, uint32_t* physAddress) {
         return ogCast(pVCpu, address, physAddress);
     }
 
@@ -78,8 +80,9 @@ public:
             void* cpu = CPU(pVMAddr, i);
             if (!cpu) continue;
 
-            uintptr_t tempPhys = 0;
-            if (Cast(cpu, address, &tempPhys) == 0) {
+            uint32_t tempPhys = 0;
+            // SỬA: Ép kiểu uint32_t trước khi gọi Cast
+            if (Cast(cpu, (uint32_t)address, &tempPhys) == 0) {
                 phys = tempPhys;
                 Cache[address] = tempPhys;
                 return true;
@@ -92,7 +95,8 @@ public:
     bool Read(uintptr_t address, T& out) {
         uintptr_t physAddress;
         if (!Convert(address, physAddress)) return false;
-        return HookRead(pVMAddr, physAddress, &out, sizeof(T)) == 0;
+        // SỬA: Ép kiểu uint32_t cho tham số địa chỉ vật lý
+        return HookRead(pVMAddr, (uint32_t)physAddress, &out, sizeof(T)) == 0;
     }
 
     template<typename T>
@@ -106,7 +110,7 @@ public:
     static void Write(uintptr_t address, const T& value) {
         uintptr_t physAddress;
         if (Convert(address, physAddress)) {
-            HookWrite(pVMAddr, physAddress, (void*)&value, sizeof(T));
+            HookWrite(pVMAddr, (uint32_t)physAddress, (void*)&value, sizeof(T));
         }
     }
 
@@ -114,7 +118,7 @@ public:
     static bool ReadFast2(uintptr_t address, T* data) {
         uintptr_t physAddress;
         if (!Convert(address, physAddress)) return false;
-        return HookRead(pVMAddr, physAddress, data, sizeof(T)) == 0;
+        return HookRead(pVMAddr, (uint32_t)physAddress, data, sizeof(T)) == 0;
     }
 
     template<typename T>
@@ -126,7 +130,7 @@ public:
         }
 
         size_t size = sizeof(T) * array.size();
-        DWORD status = HookRead(pVMAddr, convertedAddress, array.data(), size);
+        DWORD status = HookRead(pVMAddr, (uint32_t)convertedAddress, array.data(), size);
 
         return status == 0;
     }
