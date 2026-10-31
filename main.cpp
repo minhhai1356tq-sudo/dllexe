@@ -1,6 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <windows.h>
-// Sửa lại đường dẫn include trỏ đúng vào thư mục imgui tự tải về
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_win32.h"
 #include "imgui/backends/imgui_impl_dx11.h"
@@ -27,8 +26,7 @@
 #include <EspLines/Aimbot/Aimbot.hpp>
 #include <src/ui/ui.hpp>
 
-// Fix lỗi undeclared identifier cho hWindow
-HWND hWindow = nullptr;
+// KHÔNG khai báo HWND hWindow ở đây vì đã có trong Overlay.cpp
 
 void initcmd() {
 	AllocConsole();
@@ -170,7 +168,7 @@ namespace Cheat {
 				if (g_Globals.General.Capture != CaptureBypassOn) 
 				{
 					CaptureBypassOn = g_Globals.General.Capture;
-					SetWindowDisplayAffinity(hWindow, CaptureBypassOn ? WDA_EXCLUDEFROMCAPTURE : WDA_NONE);
+					SetWindowDisplayAffinity(FWork::Overlay::GetOverlayWindow(), CaptureBypassOn ? WDA_EXCLUDEFROMCAPTURE : WDA_NONE);
 				}
 
 				ImGui_ImplDX11_NewFrame();
@@ -225,7 +223,6 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
     return 0;
 }
 
-// Tạo wrapper thread để tránh lỗi ép kiểu LPTHREAD_START_ROUTINE
 DWORD WINAPI MainThread(LPVOID lpParam) {
 	wWinMain((HINSTANCE)lpParam, NULL, NULL, 0);
 	return 0;
@@ -236,7 +233,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     case DLL_PROCESS_ATTACH:
         g_hModule = hModule;
         DisableThreadLibraryCalls(hModule);
-        // Gọi hàm wrapper thay vì gọi trực tiếp wWinMain
         CreateThread(NULL, 0, MainThread, hModule, 0, NULL);
         break;
     case DLL_PROCESS_DETACH:
