@@ -38,5 +38,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: dllexe-x64
-        path: Release/*.dll
+        path: '**/Release/*.dll'
         if-no-files-found: error
