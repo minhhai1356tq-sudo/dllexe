@@ -1,4 +1,4 @@
-// Offsets.hpp — FF 32-bit (Steph Wolf Dumper 2026-10-15)
+// Offsets.hpp — FF 64-bit (Steph Wolf Dumper 2026-10-28)
 #pragma once
 #include <cstdint>
 
@@ -7,7 +7,7 @@ public:
     // BASE (runtime)
     static inline uintptr_t Il2Cpp      = 0x0;
     static inline uintptr_t UnityCpp    = 0x0;
-    static inline uintptr_t InitBase    = 0xA342EFC;
+    static inline uintptr_t InitBase    = 0xA33ED84;
     static inline uintptr_t StaticClass = 0x5C;
 
     // BỔ SUNG CHO DATA.CPP
