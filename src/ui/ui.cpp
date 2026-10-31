@@ -9,9 +9,9 @@
 #include <src/Fonts/FontAwesome.hpp>
 #include <src/Fonts/Fonts.hpp>
 #include <thread>
-#include <Auth/auth.hpp>
-#define CURL_STATICLIB
-#include "Auth/Curl/curl.h"
+// #include <Auth/auth.hpp> // ĐÃ XÓA
+// #define CURL_STATICLIB // ĐÃ XÓA
+// #include "Auth/Curl/curl.h" // ĐÃ XÓA
 #include "src/Fonts/Fonts.hpp"
 #include <FontAwesome6.hpp>
 #include "Logo.hpp"
