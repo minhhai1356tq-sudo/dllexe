@@ -9,101 +9,74 @@
 
 HWND RenderWindow;
 
-namespace Render
-{
-    std::vector<DWORD> GetProcessIdsByName(const std::wstring& ProcessName)
-    {
+namespace Render {
+    std::vector<DWORD> GetProcessIdsByName(const std::wstring& ProcessName) {
         std::vector<DWORD> processIds;
-
         HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-        if (hSnapshot == INVALID_HANDLE_VALUE) {
-            return processIds;
-        }
+        if (hSnapshot == INVALID_HANDLE_VALUE) return processIds;
 
         PROCESSENTRY32 processEntry;
         processEntry.dwSize = sizeof(PROCESSENTRY32);
-
-        if (Process32First(hSnapshot, &processEntry))
-        {
+        if (Process32First(hSnapshot, &processEntry)) {
             do {
                 if (ProcessName == processEntry.szExeFile)
-                {
                     processIds.push_back(processEntry.th32ProcessID);
-                }
             } while (Process32Next(hSnapshot, &processEntry));
         }
-
         CloseHandle(hSnapshot);
-
         return processIds;
     }
 
-    inline BOOL CALLBACK EnumChildWindowsProc(HWND hWnd, LPARAM lParam)
-    {
-        char windowName[256];
+    BOOL CALLBACK EnumChildWindowsProc(HWND hWnd, LPARAM lParam) {
+        char windowName[256] = {};
         GetWindowTextA(hWnd, windowName, sizeof(windowName));
         std::string name(windowName);
 
-        char className[256];
+        char className[256] = {};
         GetClassNameA(hWnd, className, sizeof(className));
         std::string class_str(className);
 
-        std::cout << "[INFO] Verificando janela filha: " << name << " | Classe: " << class_str << std::endl;
-
-        if (name == "_ctl.Window" && class_str.find("BlueStacksApp") != std::wstring::npos)
-        {
+        if (name == "_ctl.Window" && class_str.find("BlueStacksApp") != std::string::npos) {
             RenderWindow = hWnd;
             std::cout << "[INFO] Janela Render encontrada: " << name << std::endl;
             return FALSE;
         }
-        else if (name == "HD-Player" && class_str.find("Qt") != std::wstring::npos)
-        {
+        else if (name == "HD-Player" && class_str.find("Qt") != std::string::npos) {
             RenderWindow = hWnd;
             std::cout << "[INFO] Janela Render encontrada: " << name << std::endl;
             return FALSE;
         }
-
         return TRUE;
     }
 
-    inline BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
-    {
-        DWORD processId = *reinterpret_cast<DWORD*>(lParam);
-
-        DWORD windowProcessId;
+    BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam) {
+        // FIX: lParam truyền thẳng DWORD value, không phải địa chỉ
+        DWORD processId = static_cast<DWORD>(lParam);
+        DWORD windowProcessId = 0;
         GetWindowThreadProcessId(hWnd, &windowProcessId);
-
-        if (windowProcessId == processId)
-        {
-            EnumChildWindows(hWnd, EnumChildWindowsProc, lParam);
+        if (windowProcessId == processId) {
+            EnumChildWindows(hWnd, EnumChildWindowsProc, 0);
         }
-
         return TRUE;
     }
 
-    HWND Render::FindRenderWindow()
-    {
-        auto BlueStacksProcesses = Render::GetProcessIdsByName(L"Bluestacks.exe");
-        if (BlueStacksProcesses.empty()) {
-            BlueStacksProcesses = Render::GetProcessIdsByName(L"HD-Player.exe");
-        }
-
+    HWND FindRenderWindow() {
+        RenderWindow = nullptr;  // FIX: reset để không dùng HWND stale
+        auto BlueStacksProcesses = GetProcessIdsByName(L"Bluestacks.exe");
+        if (BlueStacksProcesses.empty())
+            BlueStacksProcesses = GetProcessIdsByName(L"HD-Player.exe");
         if (BlueStacksProcesses.empty()) {
             std::cout << "[ERROR] Nenhum processo do BlueStacks encontrado!" << std::endl;
             return nullptr;
         }
-
-        for (const auto& ProcessId : BlueStacksProcesses)
-        {
-            HANDLE ProcessHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcessId);
-            if (ProcessHandle)
-            {
-                EnumWindows(EnumWindowsProc, reinterpret_cast<LPARAM>(&ProcessId));
-
+        for (const auto& ProcessId : BlueStacksProcesses) {
+            HANDLE ProcessHandle = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, ProcessId);
+            if (ProcessHandle) {
+                // FIX: truyền giá trị DWORD, không phải &ProcessId
+                EnumWindows(EnumWindowsProc, static_cast<LPARAM>(ProcessId));
                 CloseHandle(ProcessHandle);
             }
         }
-
         return RenderWindow;
     }
 }
