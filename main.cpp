@@ -76,24 +76,33 @@ DWORD WINAPI Unload() {
 bool memoryinit = false;
 
 void Memoryy() {
+	std::cout << "[*] Memoryy started" << std::endl;
 	auto vmm = GetModuleHandleA("BstkVMM.dll");
 	if (vmm == nullptr) {
+		std::cout << "[-] BstkVMM.dll not found" << std::endl;
 		return;
 	}
+	std::cout << "[+] BstkVMM.dll found at: " << vmm << std::endl;
 
 	auto readFunc = (MemoryUtils::PGMPhysReadFunc)GetProcAddress(vmm, "PGMPhysRead");
 	if (readFunc == nullptr) {
+		std::cout << "[-] PGMPhysRead not found" << std::endl;
 		return;
 	}
+	std::cout << "[+] PGMPhysRead found at: " << readFunc << std::endl;
 
 	MH_Initialize();
 	if (MH_CreateHook((LPVOID)readFunc, MemoryUtils::HookedPGMPhysRead, (LPVOID*)&MemoryUtils::ogPhysRead) != MH_OK) {
+		std::cout << "[-] MH_CreateHook failed" << std::endl;
 		return;
 	}
+	std::cout << "[+] Hook created" << std::endl;
 
 	if (MH_EnableHook((LPVOID)readFunc) != MH_OK) {
+		std::cout << "[-] MH_EnableHook failed" << std::endl;
 		return;
 	}
+	std::cout << "[+] Hook enabled, waiting for vmPtr..." << std::endl;
 
 	int timeout = 5000;
 	int elapsed = 0;
@@ -103,25 +112,38 @@ void Memoryy() {
 		elapsed++;
 	}
 
-	MemoryUtils::ogCPU = (MemoryUtils::VMMGetCpuByIdFunc)GetProcAddress(vmm, "VMMGetCpuById");
-	if (MemoryUtils::ogCPU == nullptr) {
+	if (MemoryUtils::vmPtr == nullptr) {
+		std::cout << "[-] Timeout waiting for vmPtr" << std::endl;
 		return;
 	}
+	std::cout << "[+] vmPtr found" << std::endl;
+
+	MemoryUtils::ogCPU = (MemoryUtils::VMMGetCpuByIdFunc)GetProcAddress(vmm, "VMMGetCpuById");
+	if (MemoryUtils::ogCPU == nullptr) {
+		std::cout << "[-] VMMGetCpuById not found" << std::endl;
+		return;
+	}
+	std::cout << "[+] VMMGetCpuById found" << std::endl;
 
 	MemoryUtils::ogCast = (MemoryUtils::PGMPhysGCPtr2GCPhysFunc)GetProcAddress(vmm, "PGMPhysGCPtr2GCPhys");
 	if (MemoryUtils::ogCast == nullptr) {
+		std::cout << "[-] PGMPhysGCPtr2GCPhys not found" << std::endl;
 		return;
 	}
+	std::cout << "[+] PGMPhysGCPtr2GCPhys found" << std::endl;
 
 	MemoryUtils::ogWrite = (MemoryUtils::PGMPhysSimpleWriteGCPhysFunc)GetProcAddress(vmm, "PGMPhysSimpleWriteGCPhys");
 	if (MemoryUtils::ogWrite == nullptr) {
+		std::cout << "[-] PGMPhysSimpleWriteGCPhys not found" << std::endl;
 		return;
 	}
+	std::cout << "[+] PGMPhysSimpleWriteGCPhys found" << std::endl;
 
 	MemoryUtils::Initialize(MemoryUtils::vmPtr);
-	std::cout << "Virt Memory: " << MemoryUtils::pVMAddr << std::endl;
+	std::cout << "[+] Virt Memory initialized: " << MemoryUtils::pVMAddr << std::endl;
 
 	memoryinit = true;
+	std::cout << "[+] Memoryy finished successfully" << std::endl;
 }
 
 namespace Cheat {
