@@ -16,11 +16,12 @@ public:
 
     inline static std::unordered_map<uintptr_t, uintptr_t> Cache;
 
-    // SỬA: Đổi uintptr_t thành uint32_t cho các tham số hook của VBox
-    using PGMPhysReadFunc = int(__cdecl*)(void*, uint32_t, void*, size_t);
+    // FIX: VirtualBox PGMPhysRead có 5 tham số, tham số cuối là PGMACCESSORIGIN (int).
+    // Thiếu nó → stack lệch trên x64 → crash ngay khi hook fire.
+    using PGMPhysReadFunc = int(__cdecl*)(void*, uint32_t, void*, size_t, int);
     using VMMGetCpuByIdFunc = void* (__cdecl*)(void*, int);
     using PGMPhysGCPtr2GCPhysFunc = int(__cdecl*)(void*, uint32_t, uint32_t*);
-    using PGMPhysSimpleWriteGCPhysFunc = int(__cdecl*)(void*, uint32_t, void*, size_t);
+    using PGMPhysSimpleWriteGCPhysFunc = int(__cdecl*)(void*, uint32_t, void*, size_t, int);
 
     inline static PGMPhysReadFunc ogPhysRead = nullptr;
     inline static VMMGetCpuByIdFunc ogCPU = nullptr;
@@ -32,29 +33,26 @@ public:
         return size * nmemb;
     }
 
-    // SỬA: Tham số GCPhys giữ nguyên uint32_t
-    static int __cdecl HookedPGMPhysRead(void* pVM, uint32_t GCPhys, void* pvBuf, size_t cbRead) {
+    static int __cdecl HookedPGMPhysRead(void* pVM, uint32_t GCPhys, void* pvBuf, size_t cbRead, int enmOrigin) {
         if (!vmPtr) {
             vmPtr = pVM;
             std::cout << "Memory initialized: " << vmPtr << std::endl;
         }
-        return ogPhysRead(pVM, GCPhys, pvBuf, cbRead);
+        return ogPhysRead(pVM, GCPhys, pvBuf, cbRead, enmOrigin);
     }
 
-    static int HookWrite(void* pVM, uint32_t GCPhys, void* pvBuf, size_t cbRead) {
-        return ogWrite(pVM, GCPhys, pvBuf, cbRead);
+    static int HookWrite(void* pVM, uint32_t GCPhys, void* pvBuf, size_t cbRead, int enmOrigin) {
+        return ogWrite(pVM, GCPhys, pvBuf, cbRead, enmOrigin);
     }
 
-    static int HookRead(void* pVM, uint32_t GCPhys, void* pvBuf, size_t cbRead) {
-        return ogPhysRead(pVM, GCPhys, pvBuf, cbRead);
+    static int HookRead(void* pVM, uint32_t GCPhys, void* pvBuf, size_t cbRead, int enmOrigin) {
+        return ogPhysRead(pVM, GCPhys, pvBuf, cbRead, enmOrigin);
     }
 
-    static void* CPU(void* pVM, int cpuId) {
-        return ogCPU(pVM, cpuId);
-    }
+    static void* CPU(void* pVM, int cpuId) { return ogCPU ? ogCPU(pVM, cpuId) : nullptr; }
 
     static int Cast(void* pVCpu, uint32_t address, uint32_t* physAddress) {
-        return ogCast(pVCpu, address, physAddress);
+        return ogCast ? ogCast(pVCpu, address, physAddress) : -1;
     }
 
     static void Initialize(void* pVM) {
@@ -65,6 +63,8 @@ public:
 
     static constexpr uint32_t MAX_CPU = 4U;
     static constexpr uintptr_t MIN_VALID_ADDRESS = 0x1000;
+    // PGMACCESSORIGIN_UNKNOWN — giá trị hợp lệ cho tham số cuối
+    static constexpr int PGM_ACCESS_ORIGIN_UNKNOWN = 0;
 
     static bool Convert(uintptr_t address, uintptr_t& phys) {
         phys = 0;
@@ -79,9 +79,7 @@ public:
         for (uint32_t i = 0; i < MAX_CPU; ++i) {
             void* cpu = CPU(pVMAddr, i);
             if (!cpu) continue;
-
             uint32_t tempPhys = 0;
-            // SỬA: Ép kiểu uint32_t trước khi gọi Cast
             if (Cast(cpu, (uint32_t)address, &tempPhys) == 0) {
                 phys = tempPhys;
                 Cache[address] = tempPhys;
@@ -95,8 +93,7 @@ public:
     bool Read(uintptr_t address, T& out) {
         uintptr_t physAddress;
         if (!Convert(address, physAddress)) return false;
-        // SỬA: Ép kiểu uint32_t cho tham số địa chỉ vật lý
-        return HookRead(pVMAddr, (uint32_t)physAddress, &out, sizeof(T)) == 0;
+        return HookRead(pVMAddr, (uint32_t)physAddress, &out, sizeof(T), PGM_ACCESS_ORIGIN_UNKNOWN) == 0;
     }
 
     template<typename T>
@@ -110,7 +107,7 @@ public:
     static void Write(uintptr_t address, const T& value) {
         uintptr_t physAddress;
         if (Convert(address, physAddress)) {
-            HookWrite(pVMAddr, (uint32_t)physAddress, (void*)&value, sizeof(T));
+            HookWrite(pVMAddr, (uint32_t)physAddress, (void*)&value, sizeof(T), PGM_ACCESS_ORIGIN_UNKNOWN);
         }
     }
 
@@ -118,20 +115,15 @@ public:
     static bool ReadFast2(uintptr_t address, T* data) {
         uintptr_t physAddress;
         if (!Convert(address, physAddress)) return false;
-        return HookRead(pVMAddr, (uint32_t)physAddress, data, sizeof(T)) == 0;
+        return HookRead(pVMAddr, (uint32_t)physAddress, data, sizeof(T), PGM_ACCESS_ORIGIN_UNKNOWN) == 0;
     }
 
     template<typename T>
     bool ReadArray(uintptr_t address, std::vector<T>& array) {
         uintptr_t convertedAddress;
-        bool result = Convert(address, convertedAddress);
-        if (!result) {
-            return false;
-        }
-
+        if (!Convert(address, convertedAddress)) return false;
         size_t size = sizeof(T) * array.size();
-        DWORD status = HookRead(pVMAddr, (uint32_t)convertedAddress, array.data(), size);
-
+        DWORD status = HookRead(pVMAddr, (uint32_t)convertedAddress, array.data(), size, PGM_ACCESS_ORIGIN_UNKNOWN);
         return status == 0;
     }
 
@@ -148,7 +140,6 @@ public:
     std::string String(uintptr_t address, int size, bool unicode = true) {
         std::vector<byte> stringBytes(size);
         if (!ReadArray(address, stringBytes)) return "";
-
         std::string result;
         if (unicode) {
             std::wstring wstr(reinterpret_cast<wchar_t*>(stringBytes.data()), size / 2);
@@ -157,12 +148,8 @@ public:
         else {
             result = std::string(reinterpret_cast<char*>(stringBytes.data()), size);
         }
-
         size_t nullPos = result.find('\0');
-        if (nullPos != std::string::npos) {
-            result = result.substr(0, nullPos);
-        }
-
+        if (nullPos != std::string::npos) result = result.substr(0, nullPos);
         return result;
     }
 };
