@@ -235,6 +235,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 	initcmd();
 #endif // _DEBUG
 
+    Sleep(10000); // GIỮ CONSOLE 10 GIÂY ĐỂ XEM LOG
     Cheat::Initialize();
 
 	while (!g_Globals.General.ShutDown) {
