@@ -197,13 +197,13 @@ namespace Cheat {
 				ImGui_ImplWin32_NewFrame();
 				ImGui::NewFrame();
 				{
-					FWork::Data::Work();
+					// FWork::Data::Work(); // ĐÃ COMMENT ĐỂ TEST LỖI
 					
 					Interface.RenderGui();
 
-					if (g_Globals.Visuals.Enable) {
-						ESP::Players();
-					}
+					// if (g_Globals.Visuals.Enable) { // ĐÃ COMMENT ĐỂ TEST LỖI
+					// 	ESP::Players();
+					// }
 
 					if (g_Globals.Misc.ShowAimbotFov) {
 						ImColor OutlineColor = ImColor(g_Globals.Misc.AimbotFovColor[0], g_Globals.Misc.AimbotFovColor[1], g_Globals.Misc.AimbotFovColor[2], g_Globals.Misc.AimbotFovColor[3]);
@@ -235,7 +235,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 	initcmd();
 #endif // _DEBUG
 
-    Sleep(10000); // GIỮ CONSOLE 10 GIÂY ĐỂ XEM LOG
+    // Sleep(10000); // Đã xóa dòng này
     Cheat::Initialize();
 
 	while (!g_Globals.General.ShutDown) {
