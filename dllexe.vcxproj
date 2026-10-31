@@ -44,9 +44,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   
+  <!-- ĐƯỜNG DẪN INCLUDE & LIB -->
   <PropertyGroup>
-    <IncludePath>$(ProjectDir);$(ProjectDir)minhook\include;$(ProjectDir)imgui;$(ProjectDir)imgui\backends;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)minhook\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)minhook\include;$(ProjectDir)imgui;$(ProjectDir)imgui\backends;$(ProjectDir)Auth\Curl;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)minhook\lib;$(ProjectDir)Auth\Curl;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -61,7 +62,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>user32.lib;d3d11.lib;D3DCompiler.lib;dwmapi.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <!-- THÊM libcurl.lib -->
+      <AdditionalDependencies>user32.lib;d3d11.lib;D3DCompiler.lib;dwmapi.lib;windowscodecs.lib;libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,7 +82,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>user32.lib;d3d11.lib;D3DCompiler.lib;dwmapi.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <!-- THÊM libcurl.lib -->
+      <AdditionalDependencies>user32.lib;d3d11.lib;D3DCompiler.lib;dwmapi.lib;windowscodecs.lib;libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
 
@@ -92,7 +95,9 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_dx11.cpp" />
+    <!-- MinHook: thêm cả thư mục con hde -->
     <ClCompile Include="minhook\src\*.c" />
+    <ClCompile Include="minhook\src\hde\*.c" />
     <ClCompile Include="src\**\*.cpp" />
     <ClCompile Include="EspLines\**\*.cpp" />
     <ClCompile Include="src\Fonts\Fonts.cpp" />
